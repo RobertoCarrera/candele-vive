@@ -1,0 +1,162 @@
+---
+/**
+ * Stepper — barra de progreso de los 4 pasos del checkout.
+ * Step actual: terracota sólido. Completados: ink con check. Futuros: outline.
+ * Steps completados son clickable para volver atrás.
+ */
+
+interface Props {
+  current: 1 | 2 | 3 | 4;
+}
+
+const { current } = Astro.props;
+
+const steps = [
+  { n: 1, label: 'Cesta', href: '/cesta' },
+  { n: 2, label: 'Envío', href: '/cesta/envio' },
+  { n: 3, label: 'Pago', href: '/cesta/pago' },
+  { n: 4, label: 'Confirmación', href: '/cesta/confirmacion' },
+];
+
+const stepState = (n: number): 'done' | 'current' | 'future' => {
+  if (n < current) return 'done';
+  if (n === current) return 'current';
+  return 'future';
+};
+---
+
+<nav class="stepper" aria-label="Pasos del pedido">
+  <ol class="stepper__list">
+    {steps.map((s) => {
+      const state = stepState(s.n);
+      const isClickable = state === 'done' && s.n < 4;
+      return (
+        <li class={`stepper__step stepper__step--${state}`} data-state={state}>
+          {isClickable ? (
+            <a href={s.href} class="stepper__link">
+              <span class="stepper__num" aria-hidden="true">
+                {state === 'done' ? '✓' : s.n}
+              </span>
+              <span class="stepper__label">{s.label}</span>
+            </a>
+          ) : (
+            <span class="stepper__link" aria-current={state === 'current' ? 'step' : undefined}>
+              <span class="stepper__num" aria-hidden="true">
+                {state === 'done' ? '✓' : s.n}
+              </span>
+              <span class="stepper__label">{s.label}</span>
+            </span>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+<style>
+  .stepper {
+    background: var(--bg-soft);
+    border-top: 1px solid var(--bg-deep);
+    border-bottom: 1px solid var(--bg-deep);
+    padding-block: var(--space-4);
+  }
+  .stepper__list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    max-width: 48rem;
+    margin-inline: auto;
+  }
+  .stepper__step {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .stepper__step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 18px;
+    right: 0;
+    width: 50%;
+    height: 1px;
+    background: var(--bg-deep);
+    z-index: 0;
+  }
+  .stepper__step:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 0;
+    width: 50%;
+    height: 1px;
+    background: var(--bg-deep);
+    z-index: 0;
+  }
+  /* Líneas conectoras que cambian con el estado */
+  .stepper__step--done::after,
+  .stepper__step--current::before {
+    background: var(--ink);
+  }
+  .stepper__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--ink);
+    position: relative;
+    z-index: 1;
+    background: var(--bg-soft);
+    padding: 0 var(--space-2);
+  }
+  .stepper__num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: 1.5px solid var(--bg-deep);
+    background: var(--bg-soft);
+    color: var(--ink-mute);
+    transition: all 0.4s var(--ease-soft);
+  }
+  .stepper__step--current .stepper__num {
+    background: var(--terracotta);
+    color: var(--bg-soft);
+    border-color: var(--terracotta);
+    box-shadow: 0 0 0 4px var(--terracotta-soft);
+  }
+  .stepper__step--done .stepper__num {
+    background: var(--ink);
+    color: var(--bg-soft);
+    border-color: var(--ink);
+  }
+  .stepper__label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    white-space: nowrap;
+  }
+  .stepper__step--current .stepper__label { color: var(--terracotta); }
+  .stepper__step--done .stepper__label { color: var(--ink); }
+  .stepper__step--done a.stepper__link:hover .stepper__num {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+  }
+
+  @media (max-width: 600px) {
+    .stepper__label { display: none; }
+    .stepper__step:not(:last-child)::after,
+    .stepper__step:not(:first-child)::before { top: 18px; }
+  }
+</style>

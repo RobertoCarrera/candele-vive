@@ -1,0 +1,173 @@
+---
+/**
+ * Hero — portada de marca.
+ * Foto grande a la derecha (imagen real del R2), texto a la izquierda.
+ * Mini imagen abajo a la derecha con datos clave.
+ */
+import { IMG } from '../../lib/images';
+import { UI } from '../../data/ui';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container-wide hero__inner">
+    <div class="hero__copy">
+      <p class="eyebrow hero__eyebrow">
+        <span class="hero__dot" aria-hidden="true"></span>
+        {UI.home.heroEyebrow}
+      </p>
+
+      <h1 id="hero-title" class="hero__title">
+        Velas hechas en casa, <em>para tu casa</em>
+      </h1>
+
+      <p class="hero__body">{UI.home.heroBody}</p>
+
+      <div class="hero__ctas">
+        <a href="/catalogo" class="btn btn-primary">Ver el catálogo</a>
+        <a href="/taller" class="btn-script">cómo las hacemos →</a>
+      </div>
+    </div>
+
+    <div class="hero__art" aria-hidden="false">
+      <div class="hero__photo-wrap">
+        <img
+          src={IMG.home}
+          alt="Vela Candele Vive encendida, imagen principal de marca"
+          class="hero__photo"
+          loading="eager"
+          decoding="async"
+          width="800"
+          height="1000"
+        />
+        <span class="hand-stamp hero__stamp">by hand ✦</span>
+      </div>
+
+      <div class="hero__mini" aria-hidden="true">
+        <img
+          src={IMG.taller.velas}
+          alt=""
+          class="hero__mini-photo"
+          loading="lazy"
+          width="200"
+          height="200"
+        />
+        <p class="hero__caption">
+          19 velas · 5 colecciones<br />
+          hechas en pequeños lotes
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: var(--space-16) var(--space-24);
+    overflow: hidden;
+  }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-16);
+    align-items: end;
+  }
+  @media (min-width: 1000px) {
+    .hero__inner {
+      grid-template-columns: 1.1fr 1fr;
+      gap: var(--space-20);
+    }
+  }
+
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+  .hero__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    box-shadow: 0 0 0 4px var(--terracotta-soft);
+  }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 6vw, 5.2rem);
+    line-height: 0.98;
+    color: var(--ink);
+    margin-bottom: var(--space-8);
+    max-width: 16ch;
+  }
+  .hero__title em {
+    font-style: italic;
+    color: var(--terracotta);
+    font-weight: 400;
+  }
+
+  .hero__body {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 30rem;
+    margin-bottom: var(--space-8);
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .hero__art {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: var(--space-4);
+    align-items: end;
+  }
+
+  .hero__photo-wrap {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    box-shadow: var(--sh-3);
+  }
+  .hero__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero__stamp {
+    position: absolute;
+    bottom: var(--space-6);
+    right: var(--space-6);
+    background: var(--bg-soft);
+  }
+
+  .hero__mini {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    align-self: end;
+    margin-bottom: var(--space-4);
+  }
+  .hero__mini-photo {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-2);
+  }
+  .hero__caption {
+    font-family: var(--font-hand);
+    color: var(--terracotta);
+    font-size: 1.2rem;
+    line-height: 1.3;
+  }
+</style>

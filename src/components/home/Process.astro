@@ -1,0 +1,97 @@
+---
+/**
+ * Process — el proceso en 4 pasos, sin adornos. Cada paso es texto + número.
+ */
+import Wave from '../decorative/Wave.astro';
+
+const steps = [
+  { n: '01', title: 'Cera de soja', body: 'Cera 100% natural, sin parafinas. Se funde a fuego lento, en un cazo grande de cobre.' },
+  { n: '02', title: 'Esencias botánicas', body: 'Aceites esenciales y fragancias sin ftalatos, mezcladas a mano según la fórmula de cada colección.' },
+  { n: '03', title: 'Vertido a mano', body: 'Cada vela se vierte de una en una, con mecha de algodón sin plomo. Sin máquinas, sin prisa.' },
+  { n: '04', title: 'Reposo de 14 días', body: 'Después de sellar la cera, la vela reposa dos semanas para que el aroma se asiente. Recién entonces, se etiqueta y se envía.' },
+];
+---
+
+<section class="process section" aria-labelledby="process-title">
+  <div class="container">
+    <header class="process__head">
+      <p class="eyebrow">cómo se hacen</p>
+      <h2 id="process-title" class="process__title">
+        Cuatro pasos, <em>catorce días</em>
+      </h2>
+      <p class="process__lede">
+        El proceso es lento a propósito. Creemos que un aroma que se ha hecho
+        con tiempo se nota al encender la vela.
+      </p>
+      <Wave class="process__wave" color="var(--terracotta)" />
+    </header>
+
+    <ol class="process__steps">
+      {steps.map((s) => (
+        <li class="process__step">
+          <span class="process__num">{s.n}</span>
+          <h3 class="process__step-title">{s.title}</h3>
+          <p class="process__step-body">{s.body}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process { background: var(--bg-soft); }
+  .process__head { text-align: center; max-width: 38rem; margin-inline: auto; margin-bottom: var(--space-16); }
+  .process__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1;
+    margin-top: var(--space-3);
+  }
+  .process__title em { font-style: italic; color: var(--terracotta); }
+  .process__lede {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-top: var(--space-4);
+  }
+  .process__wave { width: 120px; height: 12px; margin: var(--space-6) auto 0; }
+
+  .process__steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    counter-reset: step;
+  }
+  @media (min-width: 700px)  { .process__steps { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .process__steps { grid-template-columns: repeat(4, 1fr); gap: var(--space-6); } }
+
+  .process__step {
+    padding: var(--space-6) var(--space-4);
+    border-top: 1px solid var(--bg-deep);
+  }
+  .process__num {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--terracotta);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: var(--space-3);
+  }
+  .process__step-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: var(--space-3);
+  }
+  .process__step-body {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+</style>

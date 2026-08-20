@@ -1,0 +1,191 @@
+---
+/**
+ * BaseLayout — chrome del sitio: fuentes, SEO, JSON-LD, slot de página.
+ * Carga el CartDrawer y el Toaster para que estén disponibles en toda la web.
+ */
+import '../styles/global.css';
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import FloatingWhatsApp from '../components/layout/FloatingWhatsApp.astro';
+import CartDrawer from '../components/cart/CartDrawer.astro';
+import Toaster from '../components/cart/Toaster.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from '../data/site';
+import { UI } from '../data/ui';
+import type { CartProduct } from '../lib/format';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article' | 'product';
+  canonical?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  bodyClass?: string;
+}
+
+const {
+  title = SITE.name + ' · ' + SITE.tagline,
+  description = SITE.description,
+  image = '/og-image.jpg',
+  type = 'website',
+  canonical,
+  noindex = false,
+  jsonLd,
+  bodyClass = '',
+} = Astro.props;
+
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, SITE.url).toString();
+const ogImage = new URL(image, SITE.url).toString();
+const fullTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}`;
+
+// Productos para el drawer y el cart count del navbar
+const allProducts = (await getCollection('products'));
+const productsData: CartProduct[] = allProducts.map((p) => ({
+  id: p.data.id,
+  name: p.data.name,
+  price: p.data.price,
+  category: p.data.category,
+  collection: p.data.collection,
+  image: p.data.image,
+  imageAlt: p.data.imageAlt,
+}));
+
+const baseJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE.url}#organization`,
+      name: SITE.legalName,
+      url: SITE.url,
+      logo: `${SITE.url}/favicon.svg`,
+      email: SITE.email,
+      telephone: SITE.phone,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: SITE.address.street,
+        addressLocality: SITE.address.locality,
+        addressRegion: SITE.address.region,
+        postalCode: SITE.address.postalCode,
+        addressCountry: SITE.address.country,
+      },
+      sameAs: [SITE.social.instagram, SITE.social.facebook, SITE.social.pinterest].filter(Boolean),
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE.url}#website`,
+      url: SITE.url,
+      name: SITE.name,
+      description: SITE.shortDescription,
+      inLanguage: SITE.locale,
+    },
+  ],
+};
+
+const allJsonLd: Record<string, unknown>[] = [baseJsonLd];
+if (jsonLd) {
+  const list = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+  for (const item of list) allJsonLd.push(item);
+}
+
+const drawerCopy = {
+  title: UI.cart.title,
+  empty: UI.cart.empty,
+  emptyBody: UI.cart.emptyBody,
+  continueShopping: UI.buttons.continueShopping,
+  viewCart: UI.buttons.viewCart,
+  subtotal: UI.cart.subtotal,
+  shipping: UI.cart.shipping,
+  free: UI.cart.shippingFree,
+  progressHint: UI.cart.progressHint,
+};
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#F4EEE0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={SITE.locale} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500;600&display=swap"
+    />
+
+    {allJsonLd.map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
+  </head>
+  <body class={bodyClass}>
+    <a href="#contenido" class="skip-link">Saltar al contenido</a>
+    <Navbar />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer />
+    <FloatingWhatsApp />
+    <CartDrawer
+      products={productsData}
+      freeShippingThreshold={SITE.freeShippingThreshold}
+      shippingCost={SITE.shippingCost}
+      whatsappRaw={SITE.whatsappRaw}
+      copy={drawerCopy}
+    />
+    <Toaster />
+
+    <style>
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: var(--ink);
+        color: var(--bg-soft);
+        padding: 0.5rem 1rem;
+        z-index: 100;
+        font-size: 0.85rem;
+        text-decoration: none;
+        border-radius: 0 0 var(--r-sm) 0;
+      }
+      .skip-link:focus { top: 0; }
+    </style>
+
+    <script>
+      // Accordion: en cada <ul data-faq> sólo puede estar abierto un <details> a la vez.
+      // Usa el evento `toggle` (capture) para no depender del orden de carga de cada página.
+      document.addEventListener('toggle', (e) => {
+        const el = e.target;
+        if (!(el instanceof HTMLDetailsElement)) return;
+        if (!el.open) return;
+        const group = el.closest('ul[data-faq]');
+        if (!group) return;
+        group.querySelectorAll('details').forEach((d) => {
+          if (d !== el) d.open = false;
+        });
+      }, true);
+    </script>
+  </body>
+</html>

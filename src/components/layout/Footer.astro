@@ -1,0 +1,239 @@
+---
+/**
+ * Footer — limpio, sin ornamento. Cuatro columnas, una ola separadora.
+ */
+import Wave from '../decorative/Wave.astro';
+import { SITE, whatsappLink } from '../../data/site';
+import { UI } from '../../data/ui';
+
+const year = new Date().getFullYear();
+const collectionLinks = [
+  { slug: 'anima', label: 'Ánima · Primavera' },
+  { slug: 'radice', label: 'Radice · Invierno' },
+  { slug: 'luce', label: 'Luce · Otoño' },
+  { slug: 'solea', label: 'Solea · Verano' },
+  { slug: 'especiales', label: 'Especiales' },
+];
+const studioLinks = [
+  { href: '/taller', label: 'El taller' },
+  { href: '/contacto', label: 'Contacto' },
+  { href: '/cesta', label: 'Mi cesta' },
+];
+---
+
+<footer class="ft">
+  <div class="container-wide">
+    <div class="ft__top" aria-hidden="true">
+      <Wave class="ft__wave" color="var(--terracotta)" />
+    </div>
+
+    <div class="ft__grid">
+      <section class="ft__col ft__col--brand">
+        <p class="ft__brand">Candele<span class="ft__brand-dot">·</span><em>vive</em></p>
+        <p class="ft__copy">{UI.footer.tagline}</p>
+        <div class="ft__contact">
+          <p>{SITE.address.locality} · {SITE.address.region}</p>
+          <p><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+          <p>
+            <a href={whatsappLink('Hola, me gustaría información sobre una vela')}>WhatsApp</a>
+          </p>
+        </div>
+      </section>
+
+      <section class="ft__col">
+        <h3 class="ft__title">{UI.footer.collectionsTitle}</h3>
+        <ul class="ft__list">
+          {collectionLinks.map((c) => (
+            <li>
+              <a href={`/coleccion/${c.slug}`} class="ft__link">{c.label}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="ft__col">
+        <h3 class="ft__title">{UI.footer.companyTitle}</h3>
+        <ul class="ft__list">
+          {studioLinks.map((l) => (
+            <li>
+              <a href={l.href} class="ft__link">{l.label}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="ft__col ft__col--news">
+        <h3 class="ft__title">{UI.footer.newsletterTitle}</h3>
+        <p class="ft__news-copy">{UI.footer.newsletterCopy}</p>
+        <form class="ft__form" data-newsletter>
+          <label class="ft__field">
+            <span class="sr-only">Correo electrónico</span>
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder={UI.footer.newsletterPlaceholder}
+              autocomplete="email"
+            />
+          </label>
+          <button type="submit" class="btn btn-primary ft__submit">Suscribirme</button>
+        </form>
+        <p class="ft__news-note" data-newsletter-status hidden></p>
+      </section>
+    </div>
+
+    <div class="ft__base">
+      <p class="ft__copy-mini">{UI.footer.copyright(year)}</p>
+      <ul class="ft__legal">
+        {UI.footer.legal.map((label) => (
+          <li><a href={`/${label.toLowerCase().replace(/ /g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '')}`} class="ft__legal-link">{label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ft {
+    background: var(--bg-warm);
+    padding-block: var(--space-20) var(--space-8);
+    margin-top: var(--space-24);
+  }
+  .ft__top { display: flex; justify-content: center; margin-bottom: var(--space-12); }
+  .ft__wave { width: 200px; height: 12px; }
+
+  .ft__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+  @media (min-width: 700px)  { .ft__grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1000px) { .ft__grid { grid-template-columns: 1.4fr 1fr 1fr 1.4fr; gap: var(--space-16); } }
+
+  .ft__brand {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--ink);
+    margin-bottom: var(--space-4);
+    font-weight: 500;
+  }
+  .ft__brand em { font-style: italic; color: var(--terracotta); font-weight: 400; }
+  .ft__brand-dot { color: var(--terracotta); margin: 0 0.05em; }
+
+  .ft__copy {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 32rem;
+    font-style: italic;
+  }
+  .ft__contact {
+    margin-top: var(--space-4);
+    font-size: 0.85rem;
+    color: var(--ink-mute);
+    line-height: 1.7;
+  }
+  .ft__contact a:hover { color: var(--terracotta); }
+
+  .ft__title {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: var(--space-4);
+  }
+  .ft__list li { margin-bottom: 0.6rem; }
+  .ft__link {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--ink);
+    transition: color 0.3s var(--ease-soft);
+  }
+  .ft__link:hover { color: var(--terracotta); }
+
+  .ft__news-copy {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+  }
+  .ft__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .ft__field input { background: var(--bg-soft); }
+  .ft__submit { align-self: flex-start; }
+
+  .ft__news-note {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--terracotta);
+    font-size: 0.95rem;
+    margin-top: var(--space-2);
+  }
+
+  .ft__base {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: center;
+    text-align: center;
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--bg-deep);
+  }
+  @media (min-width: 700px) {
+    .ft__base {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+  .ft__copy-mini {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+  }
+  .ft__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    justify-content: center;
+  }
+  .ft__legal-link {
+    font-size: 0.72rem;
+    color: var(--ink-mute);
+    letter-spacing: 0.06em;
+  }
+  .ft__legal-link:hover { color: var(--terracotta); }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<script>
+  const form = document.querySelector('[data-newsletter]') as HTMLFormElement | null;
+  const status = document.querySelector('[data-newsletter-status]') as HTMLElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!status) return;
+    status.hidden = false;
+    status.textContent = '¡Gracias! Te escribimos pronto ✦';
+    form.reset();
+  });
+</script>

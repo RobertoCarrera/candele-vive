@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import Collections from '../components/home/Collections.astro';
+import Featured from '../components/home/Featured.astro';
+import Story from '../components/home/Story.astro';
+import Process from '../components/home/Process.astro';
+import Testimonials from '../components/home/Testimonials.astro';
+import Shipping from '../components/home/Shipping.astro';
+import { SITE } from '../data/site';
+---
+
+<BaseLayout
+  title={SITE.name + ' · ' + SITE.tagline}
+  description={SITE.description}
+  bodyClass="page-home"
+>
+  <Hero />
+  <Collections />
+  <Featured />
+  <Story />
+  <Process />
+  <Testimonials />
+  <Shipping />
+</BaseLayout>

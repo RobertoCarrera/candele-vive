@@ -1,0 +1,298 @@
+---
+/**
+ * ProductCard — foto grande, esquinas suaves, sin marco, sin ornamento.
+ * Incluye un botón quick-add visible al hover (escritorio) o siempre (móvil).
+ * El quick-add añade a la cesta, abre el drawer y muestra un toast.
+ */
+import { formatPrice } from '../../lib/format';
+
+interface Props {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+  collection: string;
+  image: string;
+  imageAlt: string;
+  burnTime?: string;
+  size?: string;
+  badge?: string | null;
+  shortDescription?: string;
+  order?: number;
+  /** Asimetría opcional: subir/bajar la card dentro de la rejilla. */
+  shift?: 'up' | 'down' | 'none';
+  /** Si es true, desactiva el quick-add (p.ej. en listas donde no aplica). */
+  noQuickAdd?: boolean;
+}
+
+const {
+  id,
+  name,
+  price,
+  category,
+  image,
+  imageAlt,
+  burnTime,
+  size,
+  badge,
+  shortDescription,
+  shift = 'none',
+  noQuickAdd = false,
+} = Astro.props;
+---
+
+<article class="card" data-shift={shift} data-product-id={id}>
+  <a href={`/producto/${id}`} class="card__link">
+    <div class="card__media">
+      <img src={image} alt={imageAlt} loading="lazy" decoding="async" />
+      {badge && <span class="card__badge">{badge}</span>}
+      {!noQuickAdd && (
+        <button
+          class="card__quick-add"
+          data-quick-add={id}
+          aria-label={`Añadir ${name} a la cesta`}
+          type="button"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+        </button>
+      )}
+    </div>
+
+    <div class="card__body">
+      <p class="card__cat">{category}</p>
+      <h3 class="card__name">{name}</h3>
+      {shortDescription && <p class="card__desc">{shortDescription}</p>}
+
+      <div class="card__foot">
+        <span class="card__price">{formatPrice(price)}</span>
+        <span class="card__meta">
+          {size && <span>{size}</span>}
+          {burnTime && burnTime !== 'N/A' && <span>· {burnTime}</span>}
+        </span>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.6s var(--ease-soft);
+  }
+  .card[data-shift="up"]   { transform: translateY(-1.5rem); }
+  .card[data-shift="down"] { transform: translateY(1.5rem); }
+  @media (max-width: 700px) {
+    .card[data-shift="up"], .card[data-shift="down"] { transform: none; }
+  }
+
+  .card__link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--ink);
+    height: 100%;
+  }
+
+  .card__media {
+    position: relative;
+    background: var(--bg-soft);
+    border-radius: var(--r-lg);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    margin-bottom: var(--space-4);
+    box-shadow: var(--sh-1);
+    transition: box-shadow 0.6s var(--ease-soft);
+  }
+  .card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s var(--ease-soft);
+  }
+  .card:hover .card__media {
+    box-shadow: var(--sh-3);
+  }
+  .card:hover .card__media img {
+    transform: scale(1.03);
+  }
+
+  .card__badge {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    padding: 0.35rem 0.8rem;
+    background: rgba(244, 238, 224, 0.95);
+    backdrop-filter: blur(6px);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: var(--r-pill);
+    z-index: 2;
+  }
+
+  /* === Quick-add (dentro de la imagen) === */
+  .card__quick-add {
+    position: absolute;
+    right: var(--space-3);
+    bottom: var(--space-3);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 0;
+    background: var(--ink);
+    color: var(--bg-soft);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--sh-2);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s var(--ease-soft), transform 0.4s var(--ease-soft), background 0.3s var(--ease-soft);
+    z-index: 2;
+  }
+  .card:hover .card__quick-add,
+  .card:focus-within .card__quick-add {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .card__quick-add:hover {
+    background: var(--terracotta);
+    transform: translateY(0) scale(1.06);
+  }
+  .card__quick-add:active { transform: translateY(0) scale(0.94); }
+  .card__quick-add.is-bumped {
+    animation: bump 0.4s var(--ease-soft);
+  }
+  /* En móvil, siempre visible */
+  @media (max-width: 900px), (hover: none) {
+    .card__quick-add {
+      opacity: 1;
+      transform: translateY(0);
+      width: 40px;
+      height: 40px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card__quick-add { transition: none; }
+    .card__quick-add.is-bumped { animation: none; }
+  }
+
+  @keyframes bump {
+    0%   { transform: translateY(0) scale(1); }
+    50%  { transform: translateY(0) scale(1.18); background: var(--terracotta); }
+    100% { transform: translateY(0) scale(1); }
+  }
+
+  .card__body {
+    padding: 0 var(--space-1);
+  }
+  .card__cat {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: var(--space-2);
+  }
+  .card__name {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: var(--space-2);
+    transition: color 0.4s var(--ease-soft);
+  }
+  .card:hover .card__name {
+    color: var(--terracotta);
+  }
+  .card__desc {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: var(--space-3);
+  }
+  .card__foot {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--bg-deep);
+  }
+  .card__price {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .card__meta {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+  }
+</style>
+
+<script>
+  // === Quick-add: añade a la cesta, abre el drawer, toast ===
+  const STORAGE_KEY = 'candele-cart';
+  const cards = document.querySelectorAll<HTMLElement>('[data-product-id]');
+
+  function readCart() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { items: [] };
+      const p = JSON.parse(raw);
+      if (p && Array.isArray(p.items)) return p;
+    } catch (e) {}
+    return { items: [] };
+  }
+  function writeCart(cart) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+    window.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart } }));
+  }
+
+  cards.forEach((card) => {
+    const btn = card.querySelector<HTMLButtonElement>('[data-quick-add]');
+    if (!btn) return;
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const id = Number(btn.dataset.quickAdd);
+      if (!id) return;
+
+      const cart = readCart();
+      const existing = cart.items.find((i) => i.id === id);
+      if (existing) existing.qty += 1;
+      else cart.items.push({ id, qty: 1 });
+      writeCart(cart);
+
+      // Animación del botón
+      btn.classList.remove('is-bumped');
+      void btn.offsetWidth; // reflow
+      btn.classList.add('is-bumped');
+      setTimeout(() => btn.classList.remove('is-bumped'), 400);
+
+      // Toast + abrir drawer
+      const name = card.querySelector('.card__name')?.textContent?.trim() || 'Vela';
+      window.dispatchEvent(new CustomEvent('toast:show', {
+        detail: { type: 'success', message: `${name} añadida a la cesta` },
+      }));
+      window.dispatchEvent(new CustomEvent('cart:open'));
+    });
+  });
+</script>

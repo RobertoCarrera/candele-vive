@@ -1,0 +1,547 @@
+---
+/**
+ * CartDrawer — slide-in mini cart, anclado a la derecha.
+ * Escucha cart:updated para re-renderizar, cart:open/cart:close para mostrarse,
+ * y la tecla ESC o click en el backdrop para cerrarse.
+ *
+ * Es global: vive en BaseLayout y se inyecta en todas las páginas.
+ * Los productos se le pasan como define:vars para que el JS del cliente
+ * pueda renderizar las líneas del carrito.
+ */
+import type { CartProduct } from '../../lib/format';
+
+interface Props {
+  products: CartProduct[];
+  freeShippingThreshold: number;
+  shippingCost: number;
+  whatsappRaw: string;
+  copy: {
+    title: string;
+    empty: string;
+    emptyBody: string;
+    continueShopping: string;
+    viewCart: string;
+    subtotal: string;
+    shipping: string;
+    free: string;
+    progressHint: (remaining: string) => string;
+  };
+}
+
+const { products, freeShippingThreshold, shippingCost, whatsappRaw, copy } = Astro.props;
+---
+
+<aside class="drawer" data-drawer aria-hidden="true" role="dialog" aria-label={copy.title} aria-modal="true" tabindex="-1">
+  <div class="drawer__backdrop" data-drawer-close></div>
+
+  <div class="drawer__panel" role="document">
+    <header class="drawer__head">
+      <h2 class="drawer__title">
+        {copy.title} <span class="drawer__count" data-drawer-count>0</span>
+      </h2>
+      <button class="drawer__close" data-drawer-close aria-label="Cerrar cesta">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18" />
+          <line x1="18" y1="6" x2="6" y2="18" />
+        </svg>
+      </button>
+    </header>
+
+    <div class="drawer__body" data-drawer-body>
+      <div class="drawer__empty" data-drawer-empty>
+        <p class="drawer__empty-title">{copy.empty}</p>
+        <p class="drawer__empty-body">{copy.emptyBody}</p>
+        <a href="/catalogo" class="btn btn-secondary" data-drawer-close>Ver el catálogo</a>
+      </div>
+      <ul class="drawer__list" data-drawer-list></ul>
+    </div>
+
+    <footer class="drawer__foot" data-drawer-foot hidden>
+      <p class="drawer__progress" data-drawer-progress hidden></p>
+
+      <div class="drawer__row drawer__row--shipping">
+        <span>{copy.subtotal}</span>
+        <strong data-drawer-subtotal>0,00 €</strong>
+      </div>
+      <div class="drawer__row drawer__row--shipping">
+        <span>{copy.shipping}</span>
+        <strong data-drawer-shipping>—</strong>
+      </div>
+
+      <a href="/cesta" class="btn btn-primary drawer__view-cart" data-drawer-close>
+        {copy.viewCart} →
+      </a>
+      <button class="drawer__continue" data-drawer-close type="button">
+        {copy.continueShopping}
+      </button>
+    </footer>
+  </div>
+</aside>
+
+<style>
+  .drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+  }
+  .drawer.is-open { pointer-events: auto; }
+
+  .drawer__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(45, 33, 27, 0.4);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-soft);
+  }
+  .drawer.is-open .drawer__backdrop { opacity: 1; }
+
+  .drawer__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 480px;
+    background: var(--bg);
+    box-shadow: -8px 0 32px -8px rgba(45, 33, 27, 0.2);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.5s var(--ease);
+  }
+  .drawer.is-open .drawer__panel { transform: translateX(0); }
+
+  .drawer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-6);
+    border-bottom: 1px solid var(--bg-deep);
+    background: var(--bg-soft);
+  }
+  .drawer__title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .drawer__count {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--ink-mute);
+    font-weight: 400;
+    margin-left: 0.5rem;
+  }
+  .drawer__close {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s var(--ease-soft);
+  }
+  .drawer__close:hover { background: var(--bg); }
+
+  .drawer__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-4) var(--space-6);
+  }
+
+  .drawer__empty {
+    text-align: center;
+    padding: var(--space-12) 0;
+  }
+  .drawer__empty-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--ink);
+    margin-bottom: var(--space-2);
+  }
+  .drawer__empty-body {
+    font-family: var(--font-display);
+    color: var(--ink-mute);
+    font-size: 0.95rem;
+    margin-bottom: var(--space-6);
+  }
+
+  .drawer__list { display: flex; flex-direction: column; gap: var(--space-3); }
+
+  .drawer__foot {
+    padding: var(--space-4) var(--space-6) var(--space-6);
+    border-top: 1px solid var(--bg-deep);
+    background: var(--bg-soft);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .drawer__progress {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--terracotta);
+    font-size: 0.85rem;
+    text-align: center;
+    padding: var(--space-2);
+    background: var(--bg);
+    border-radius: var(--r-sm);
+    margin-bottom: var(--space-2);
+  }
+  .drawer__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .drawer__row strong { font-family: var(--font-display); font-size: 1.1rem; color: var(--ink); font-weight: 500; }
+  .drawer__view-cart { width: 100%; margin-top: var(--space-2); }
+  .drawer__continue {
+    background: transparent;
+    border: 0;
+    color: var(--ink-mute);
+    font-family: var(--font-hand);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: var(--space-2) 0;
+    margin-top: var(--space-2);
+  }
+  .drawer__continue:hover { color: var(--terracotta); }
+</style>
+
+<style is:global>
+  /* === Items del carrito (renderizados por JS, sin scope de Astro) === */
+  .drawer__item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    column-gap: var(--space-3);
+    align-items: flex-start;
+    padding: var(--space-3);
+    background: var(--bg-soft);
+    border-radius: var(--r-md);
+    position: relative;
+  }
+  .drawer__media {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    background: var(--bg-warm);
+    display: block;
+  }
+  .drawer__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .drawer__info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 2px;
+  }
+  .drawer__cat {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .drawer__name {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+    text-decoration: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .drawer__name:hover { color: var(--terracotta); }
+  .drawer__price {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--ink);
+    margin-top: 4px;
+  }
+  .drawer__price strong { font-weight: 500; }
+  .drawer__price-x {
+    color: var(--ink-mute);
+    font-style: italic;
+    font-size: 0.8rem;
+    margin: 0 0.2em;
+  }
+  .drawer__qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--bg-deep);
+    border-radius: var(--r-pill);
+    overflow: hidden;
+    margin-top: var(--space-3);
+    align-self: flex-start;
+    background: var(--bg);
+  }
+  .drawer__qty button {
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 0;
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s var(--ease-soft), color 0.2s var(--ease-soft);
+  }
+  .drawer__qty button:hover { background: var(--ink); color: var(--bg-soft); }
+  .drawer__qty button:active { background: var(--terracotta); color: var(--bg-soft); }
+  .drawer__qty span {
+    padding: 0 var(--space-3);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    min-width: 2.2rem;
+    text-align: center;
+    color: var(--ink);
+  }
+  .drawer__remove {
+    align-self: flex-start;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    background: transparent;
+    color: var(--ink-mute);
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.3s var(--ease-soft);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .drawer__remove:hover {
+    background: var(--terracotta);
+    color: var(--bg-soft);
+  }
+  .drawer__list { display: flex; flex-direction: column; gap: var(--space-3); }
+</style>
+
+<script
+  define:vars={{
+    products,
+    freeShippingThreshold,
+    shippingCost,
+    whatsappRaw,
+    copy,
+  }}
+>
+  const fmt = (n) => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(n);
+  const STORAGE_KEY = 'candele-cart';
+  const PRODUCT_BY_ID = Object.fromEntries(products.map((p) => [p.id, p]));
+
+  const drawer = document.querySelector('[data-drawer]');
+  const list = drawer?.querySelector('[data-drawer-list]');
+  const empty = drawer?.querySelector('[data-drawer-empty]');
+  const foot = drawer?.querySelector('[data-drawer-foot]');
+  const subtotalEl = drawer?.querySelector('[data-drawer-subtotal]');
+  const shippingEl = drawer?.querySelector('[data-drawer-shipping]');
+  const countEl = drawer?.querySelector('[data-drawer-count]');
+  const progressEl = drawer?.querySelector('[data-drawer-progress]');
+
+  if (!drawer) {
+    // No drawer in this page, nothing to wire.
+  } else {
+    const readCart = () => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { items: [] };
+        const parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.items)) return parsed;
+      } catch (e) {}
+      return { items: [] };
+    };
+    const writeCart = (cart) => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+      window.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart } }));
+    };
+    const showToast = (message, type = 'info') => {
+      window.dispatchEvent(new CustomEvent('toast:show', { detail: { message, type } }));
+    };
+
+    function open() {
+      drawer.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      // Foco al primer botón cerrable para accesibilidad
+      setTimeout(() => drawer.querySelector('[data-drawer-close]')?.focus(), 300);
+    }
+    function close() {
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    function render() {
+      const cart = readCart();
+      const items = cart.items;
+      const count = items.reduce((s, i) => s + (i.qty || 0), 0);
+
+      if (countEl) countEl.textContent = count > 0 ? `(${count})` : '';
+
+      if (!items.length) {
+        if (list) list.innerHTML = '';
+        if (empty) empty.style.display = '';
+        if (foot) foot.hidden = true;
+        return;
+      }
+      if (empty) empty.style.display = 'none';
+      if (foot) foot.hidden = false;
+
+      if (list) {
+        list.innerHTML = items.map((it) => {
+          const p = PRODUCT_BY_ID[it.id];
+          if (!p) return '';
+          const lineTotal = fmt(p.price * it.qty);
+          const priceLine = it.qty > 1
+            ? `${fmt(p.price)} <span class="drawer__price-x">c/u</span> · <strong>${lineTotal}</strong>`
+            : `<strong>${lineTotal}</strong>`;
+          return `
+            <li class="drawer__item" data-id="${p.id}">
+              <a href="/producto/${p.id}" class="drawer__media" data-drawer-close aria-label="Ver ${p.name}">
+                <img src="${p.image}" alt="${p.imageAlt}" loading="lazy" />
+              </a>
+              <div class="drawer__info">
+                <p class="drawer__cat">${p.category}</p>
+                <a href="/producto/${p.id}" class="drawer__name" data-drawer-close>${p.name}</a>
+                <p class="drawer__price">${priceLine}</p>
+                <div class="drawer__qty">
+                  <button data-qty-down="${p.id}" aria-label="Restar una unidad" type="button">−</button>
+                  <span>${it.qty}</span>
+                  <button data-qty-up="${p.id}" aria-label="Sumar una unidad" type="button">+</button>
+                </div>
+              </div>
+              <button class="drawer__remove" data-remove="${p.id}" aria-label="Eliminar ${p.name}" type="button">×</button>
+            </li>
+          `;
+        }).join('');
+      }
+
+      const subtotal = items.reduce((s, it) => {
+        const p = PRODUCT_BY_ID[it.id];
+        return p ? s + p.price * it.qty : s;
+      }, 0);
+      const shipping = subtotal >= freeShippingThreshold ? 0 : shippingCost;
+      if (subtotalEl) subtotalEl.textContent = fmt(subtotal);
+      if (shippingEl) shippingEl.textContent = shipping === 0 ? copy.free : fmt(shipping);
+
+      if (progressEl) {
+        if (shipping > 0) {
+          const remaining = freeShippingThreshold - subtotal;
+          progressEl.hidden = false;
+          progressEl.textContent = copy.progressHint(fmt(remaining));
+        } else {
+          progressEl.hidden = true;
+        }
+      }
+    }
+
+    // === Un solo handler de click en el drawer (captura todo, sin stopPropagation) ===
+    drawer.addEventListener('click', (e) => {
+      const t = e.target;
+      if (!(t instanceof HTMLElement)) return;
+
+      // 1) Cerrar (X, backdrop, "Seguir mirando", "Ver la cesta", imagen, nombre)
+      if (t.closest('[data-drawer-close]')) {
+        // Si es un link real, dejar que navegue — solo cerramos el drawer.
+        // Si es un botón / backdrop, prevenir y solo cerrar.
+        const link = t.closest('a[href]');
+        if (!link || !link.getAttribute('href')) {
+          e.preventDefault();
+        }
+        close();
+        return;
+      }
+
+      // 2) Cantidad +
+      const qtyUp = t.closest('[data-qty-up]');
+      if (qtyUp) {
+        e.preventDefault();
+        const id = Number(qtyUp.dataset.qtyUp);
+        const c = readCart();
+        const it = c.items.find((x) => x.id === id);
+        if (it) it.qty += 1;
+        writeCart(c);
+        render();
+        return;
+      }
+
+      // 3) Cantidad −
+      const qtyDown = t.closest('[data-qty-down]');
+      if (qtyDown) {
+        e.preventDefault();
+        const id = Number(qtyDown.dataset.qtyDown);
+        const c = readCart();
+        const it = c.items.find((x) => x.id === id);
+        if (it) {
+          it.qty -= 1;
+          if (it.qty <= 0) {
+            c.items = c.items.filter((x) => x.id !== id);
+            const p = PRODUCT_BY_ID[id];
+            if (p) showToast(`${p.name} eliminada de la cesta`, 'info');
+          }
+        }
+        writeCart(c);
+        render();
+        return;
+      }
+
+      // 4) Eliminar
+      const rm = t.closest('[data-remove]');
+      if (rm) {
+        e.preventDefault();
+        const id = Number(rm.dataset.remove);
+        const p = PRODUCT_BY_ID[id];
+        const c = readCart();
+        c.items = c.items.filter((x) => x.id !== id);
+        writeCart(c);
+        render();
+        if (p) showToast(`${p.name} eliminada de la cesta`, 'info');
+        return;
+      }
+    });
+
+    // === ESC para cerrar ===
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer.classList.contains('is-open')) close();
+    });
+
+    // === Re-render al cambiar el carrito ===
+    window.addEventListener('cart:updated', render);
+
+    // === Abrir / cerrar vía eventos globales ===
+    window.addEventListener('cart:open', open);
+    window.addEventListener('cart:close', close);
+
+    // Si se pidió abrir antes de que el listener estuviera listo
+    if (window.__cartOpenPending) {
+      delete window.__cartOpenPending;
+      open();
+    }
+
+    // Render inicial
+    render();
+  }
+</script>

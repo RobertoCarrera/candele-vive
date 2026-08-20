@@ -1,0 +1,328 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Wave from '../components/decorative/Wave.astro';
+import { UI } from '../data/ui';
+import { SITE } from '../data/site';
+import { IMG } from '../lib/images';
+
+const values = [
+  { title: 'Cera de soja', body: 'Cera 100% natural, sin parafinas. Producida en Europa, de cultivo no transgénico.' },
+  { title: 'Hecho a mano', body: 'Cada vela se vierte, etiqueta y embala a mano, una por una. Sin máquinas, sin prisa.' },
+  { title: 'Sin atajos', body: 'Sin ftalatos, sin plomo, sin parabenos. Solo fragancias y aceites esenciales de calidad.' },
+  { title: 'Packaging honesto', body: 'Cajas de papel kraft reciclable, sin plásticos, sin burbujas. Hasta la cinta es de papel.' },
+];
+
+const faqs = [
+  {
+    q: '¿Cuánto dura una vela Candele Vive?',
+    a: 'Entre 40 y 50 horas, según el formato. Recomendamos la primera quemada de 2-3 horas para que la cera se distribuya de forma uniforme y no haga túnel.',
+  },
+  {
+    q: '¿Hacéis envíos a Canarias o fuera de España?',
+    a: 'Ahora mismo solo enviamos a Península y Baleares. Si vives en Canarias, Ceuta, Melilla o fuera de España, escríbenos por WhatsApp y vemos qué podemos hacer.',
+  },
+  {
+    q: '¿Puedo devolver una vela si no me convence?',
+    a: 'Sí. Tienes 14 días para devolver una vela sin abrir. Si la has encendido y no te gusta, escríbenos y lo hablamos — preferimos regalarte otra a perderte como clienta.',
+  },
+  {
+    q: '¿Vendéis al por mayor?',
+    a: 'Sí, trabajamos con tiendas de diseño y concept stores. Escríbenos a hola@candelevive.es con el asunto "Mayoristas" y te pasamos dossier y lista de precios.',
+  },
+];
+---
+
+<BaseLayout title={UI.workshop.title} description={UI.workshop.intro}>
+  <header class="ws-hero">
+    <div class="container ws-hero__inner">
+      <p class="eyebrow">{UI.workshop.tagline}</p>
+      <h1 class="ws-hero__title">
+        Una mesa, una cocina, <em>mucho rato</em>
+      </h1>
+      <Wave class="ws-hero__wave" color="var(--terracotta)" />
+      <p class="ws-hero__lede">{UI.workshop.intro}</p>
+    </div>
+  </header>
+
+  <section class="ws-photo section">
+    <div class="container-wide">
+      <div class="ws-photo__wrap">
+        <img
+          src={IMG.taller.velas}
+          alt="Velas enfriándose en la mesa del taller"
+          class="ws-photo__img"
+          loading="lazy"
+          width="1600"
+          height="900"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="ws-values section">
+    <div class="container-wide">
+      <header class="ws-values__head">
+        <p class="eyebrow">lo que nos importa</p>
+        <h2 class="ws-values__title">Cuatro <em>promesas</em></h2>
+        <Wave class="ws-values__wave" color="var(--terracotta)" />
+      </header>
+      <ul class="ws-values__grid">
+        {values.map((v, i) => (
+          <li class="ws-value">
+            <span class="ws-value__num">0{i + 1}</span>
+            <h3 class="ws-value__title">{v.title}</h3>
+            <p class="ws-value__body">{v.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="ws-place section">
+    <div class="container ws-place__inner">
+      <div class="ws-place__copy">
+        <p class="eyebrow">el estudio</p>
+        <h2 class="ws-place__title">
+          Una mesa grande, una <em>ventana</em> y mucho silencio
+        </h2>
+        <p>
+          El estudio está en {SITE.address.locality}, en una nave pequeña
+          detrás de casa. Cuando entras hueles a cera tibia, a aceite de
+          coco, a veces a bergamota si estamos vertiendo la Colección Ánima.
+        </p>
+        <p>
+          Trabajamos tres personas: Marta, que formula las mezclas, Júlia,
+          que las vierte, y un gato gris que se sube a las cajas cuando nadie
+          lo ve. Hacemos entre 80 y 120 velas a la semana, según temporada.
+        </p>
+        <p>
+          Si te pasas por la zona, podemos enseñarte el estudio. Solo avisa
+          antes por WhatsApp.
+        </p>
+      </div>
+      <figure class="ws-place__face" data-shift="up">
+        <img
+          src={IMG.taller.mireia}
+          alt="Mireia en el taller de Candele Vive"
+          class="ws-place__face-img"
+          loading="lazy"
+          width="800"
+          height="1000"
+        />
+        <figcaption class="ws-place__face-cap">Mira, en el estudio</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="ws-faq section">
+    <div class="container ws-faq__inner">
+      <header class="ws-faq__head">
+        <p class="eyebrow">preguntas frecuentes</p>
+        <h2 class="ws-faq__title">Dudas que nos llegan</h2>
+        <Wave class="ws-faq__wave" color="var(--terracotta)" />
+      </header>
+      <ul class="ws-faq__list" data-faq>
+        {faqs.map((f) => (
+          <li class="ws-faq__item">
+            <details>
+              <summary class="ws-faq__q">{f.q}</summary>
+              <p class="ws-faq__a">{f.a}</p>
+            </details>
+          </li>
+        ))}
+      </ul>
+      <p class="ws-faq__more">
+        ¿Más preguntas? <a href="/contacto">Escríbenos</a> y te contestamos en menos de 24h.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ws-hero {
+    padding-block: var(--space-16) var(--space-8);
+    background: var(--bg);
+    text-align: center;
+  }
+  .ws-hero__inner { max-width: 44rem; margin-inline: auto; }
+  .ws-hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1.05;
+    margin-top: var(--space-3);
+  }
+  .ws-hero__title em { font-style: italic; color: var(--terracotta); }
+  .ws-hero__wave { width: 120px; height: 12px; margin: var(--space-4) auto; }
+  .ws-hero__lede {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .ws-photo__wrap {
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    box-shadow: var(--sh-2);
+  }
+  .ws-photo__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ws-values { background: var(--bg-soft); }
+  .ws-values__head { text-align: center; max-width: 38rem; margin-inline: auto; margin-bottom: var(--space-12); }
+  .ws-values__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1;
+    margin-top: var(--space-3);
+  }
+  .ws-values__title em { font-style: italic; color: var(--terracotta); }
+  .ws-values__wave { width: 120px; height: 12px; margin: var(--space-4) auto 0; }
+  .ws-values__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  @media (min-width: 700px)  { .ws-values__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .ws-values__grid { grid-template-columns: repeat(4, 1fr); } }
+  .ws-value {
+    padding: var(--space-6) var(--space-4) 0;
+    border-top: 1px solid var(--bg-deep);
+  }
+  .ws-value__num {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: var(--terracotta);
+    display: block;
+    margin-bottom: var(--space-3);
+  }
+  .ws-value__title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: var(--space-3);
+  }
+  .ws-value__body {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .ws-place { background: var(--bg); }
+  .ws-place__inner {
+    max-width: 64rem;
+    display: grid;
+    gap: var(--space-10);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .ws-place__inner {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-16);
+    }
+  }
+  .ws-place__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+  .ws-place__title em { font-style: italic; color: var(--terracotta); }
+  .ws-place__copy p {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin-bottom: var(--space-4);
+  }
+
+  .ws-place__face {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .ws-place__face[data-shift="up"] {
+    transform: translateY(-12px);
+  }
+  .ws-place__face-img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--r-xl);
+    box-shadow: var(--sh-2);
+  }
+  .ws-place__face-cap {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink-mute);
+    text-align: right;
+  }
+
+  .ws-faq { background: var(--bg-soft); }
+  .ws-faq__inner { max-width: 44rem; }
+  .ws-faq__head { text-align: center; margin-bottom: var(--space-12); }
+  .ws-faq__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1;
+    margin-top: var(--space-3);
+  }
+  .ws-faq__wave { width: 120px; height: 12px; margin: var(--space-4) auto 0; }
+  .ws-faq__list { display: flex; flex-direction: column; gap: var(--space-2); }
+  .ws-faq__item {
+    background: var(--bg);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+  .ws-faq__q {
+    cursor: pointer;
+    list-style: none;
+    padding: var(--space-4) var(--space-6);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--ink);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ws-faq__q::-webkit-details-marker { display: none; }
+  .ws-faq__q::after {
+    content: '+';
+    color: var(--terracotta);
+    font-size: 1.4rem;
+    font-weight: 300;
+    transition: transform 0.3s var(--ease-soft);
+  }
+  details[open] .ws-faq__q::after { transform: rotate(45deg); }
+  .ws-faq__a {
+    padding: 0 var(--space-6) var(--space-6);
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+  .ws-faq__more {
+    text-align: center;
+    margin-top: var(--space-8);
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink-mute);
+  }
+  .ws-faq__more a {
+    color: var(--terracotta);
+    border-bottom: 1px solid var(--terracotta);
+  }
+</style>

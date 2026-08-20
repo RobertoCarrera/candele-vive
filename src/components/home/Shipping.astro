@@ -1,0 +1,102 @@
+---
+/**
+ * Shipping — tres promesas, sin banda, sin icono.
+ */
+import { UI } from '../../data/ui';
+import { SITE } from '../../data/site';
+
+const perks = [
+  { title: 'Envío gratis +50€', body: 'Gratis a partir de 50€ a toda la Península y Baleares.' },
+  { title: 'Cera 100% soja', body: 'Sin parafinas, sin ftalatos. Mecha de algodón sin plomo.' },
+  { title: 'Hecho a mano', body: 'Cada vela se vierte a mano, en pequeños lotes, en Vilanova i la Geltrú.' },
+];
+---
+
+<section class="ship section" aria-labelledby="ship-title">
+  <div class="container">
+    <div class="ship__inner">
+      <div class="ship__copy">
+        <p class="eyebrow">lo que siempre hacemos igual</p>
+        <h2 id="ship-title" class="ship__title">
+          {UI.home.shippingTitle}
+        </h2>
+        <p class="ship__body">{UI.home.shippingBody}</p>
+        <p class="ship__city">— {SITE.address.locality}, {SITE.address.region}</p>
+      </div>
+
+      <ul class="ship__perks">
+        {perks.map((p, i) => (
+          <li class="ship__perk">
+            <span class="ship__num" aria-hidden="true">0{i + 1}</span>
+            <h3 class="ship__perk-title">{p.title}</h3>
+            <p class="ship__perk-body">{p.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ship { background: var(--bg-warm); }
+  .ship__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .ship__inner { grid-template-columns: 1fr 1.2fr; gap: var(--space-16); }
+  }
+  .ship__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+    margin-top: var(--space-3);
+  }
+  .ship__body {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 32rem;
+    margin-top: var(--space-4);
+  }
+  .ship__city {
+    margin-top: var(--space-4);
+    font-family: var(--font-hand);
+    font-size: 1.4rem;
+    color: var(--terracotta);
+  }
+  .ship__perks {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  @media (min-width: 600px) { .ship__perks { grid-template-columns: repeat(3, 1fr); } }
+  .ship__perk {
+    border-top: 1px solid var(--bg-deep);
+    padding-top: var(--space-4);
+  }
+  .ship__num {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: var(--terracotta);
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+  .ship__perk-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: var(--space-2);
+  }
+  .ship__perk-body {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+</style>

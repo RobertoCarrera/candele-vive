@@ -1,0 +1,362 @@
+---
+/**
+ * Step 4: Confirmación del pedido.
+ * - Si no hay pedido en `candele-last-order`, redirige a /cesta.
+ * - Muestra el resumen, el número de pedido, el método elegido, los datos
+ *   de envío, y CTA para volver al inicio o hacer otro pedido.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Stepper from '../../components/checkout/Stepper.astro';
+import Wave from '../../components/decorative/Wave.astro';
+import { getCollection } from 'astro:content';
+---
+
+<BaseLayout title="¡Pedido enviado! · Candele Vive" description="Tu pedido se ha enviado por WhatsApp. Te respondemos en menos de 24h." bodyClass="page-checkout page-checkout--confirm">
+  <Stepper current={4} />
+
+  <header class="ok-hero">
+    <div class="container">
+      <div class="ok-hero__seal" aria-hidden="true">✓</div>
+      <p class="eyebrow">paso 4 de 4</p>
+      <h1 class="ok-hero__title">¡Pedido <em>enviado</em>!</h1>
+      <Wave class="ok-hero__wave" color="var(--terracotta)" />
+      <p class="ok-hero__lede" data-ok-lede>
+        Hemos abierto WhatsApp con el detalle de tu pedido. Te respondemos
+        en menos de 24h para confirmar el envío.
+      </p>
+    </div>
+  </header>
+
+  <section class="ok section">
+    <div class="container ok__inner">
+      <article class="ok-summary" data-ok-summary>
+        <header class="ok-summary__head">
+          <div>
+            <p class="ok-summary__label">Número de pedido</p>
+            <p class="ok-summary__number" data-ok-number>—</p>
+          </div>
+          <div class="ok-summary__meta">
+            <p class="ok-summary__date" data-ok-date>—</p>
+            <p class="ok-summary__method" data-ok-method>—</p>
+          </div>
+        </header>
+
+        <Wave class="ok-summary__wave" color="var(--terracotta)" />
+
+        <h2 class="ok-summary__sub">Velas</h2>
+        <ul class="ok-summary__items" data-ok-items></ul>
+
+        <h2 class="ok-summary__sub">Envío</h2>
+        <div class="ok-summary__ship" data-ok-ship></div>
+
+        <h2 class="ok-summary__sub">Total</h2>
+        <div class="ok-summary__rows">
+          <div class="ok-summary__row">
+            <span>Subtotal</span>
+            <strong data-ok-subtotal>0,00 €</strong>
+          </div>
+          <div class="ok-summary__row">
+            <span>Envío</span>
+            <strong data-ok-shipping>—</strong>
+          </div>
+          <div class="ok-summary__row ok-summary__row--total">
+            <span>Total</span>
+            <strong data-ok-total>0,00 €</strong>
+          </div>
+        </div>
+      </article>
+
+      <aside class="ok-side">
+        <h2 class="ok-side__title">¿Y ahora qué?</h2>
+        <Wave class="ok-side__wave" color="var(--terracotta)" />
+        <ol class="ok-side__steps">
+          <li>
+            <span class="ok-side__num">1</span>
+            <div>
+              <h3>Te respondemos en WhatsApp</h3>
+              <p>En menos de 24h recibirás un mensaje confirmando el pedido, el envío y la forma de pago.</p>
+            </div>
+          </li>
+          <li>
+            <span class="ok-side__num">2</span>
+            <div>
+              <h3>Preparamos tu pedido</h3>
+              <p>Vertemos, dejamos reposar 14 días y etiquetamos las velas. Después, salen hacia tu casa.</p>
+            </div>
+          </li>
+          <li>
+            <span class="ok-side__num">3</span>
+            <div>
+              <h3>Lo recibes en 2-3 días</h3>
+              <p>En cualquier punto de la Península o Baleares. En packaging reciclable, sin plásticos.</p>
+            </div>
+          </li>
+        </ol>
+
+        <div class="ok-side__cta">
+          <a href="/" class="btn btn-primary">Volver al inicio</a>
+          <button type="button" class="btn-link ok-side__neworder" data-ok-new>hacer otro pedido →</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ok-hero { padding-block: var(--space-16) var(--space-8); text-align: center; }
+  .ok-hero__seal {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    color: var(--bg-soft);
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    font-weight: 500;
+    margin: 0 auto var(--space-6);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 8px var(--terracotta-soft), 0 8px 24px -8px rgba(194, 91, 67, 0.4);
+  }
+  .ok-hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    line-height: 1;
+    margin-top: var(--space-3);
+  }
+  .ok-hero__title em { font-style: italic; color: var(--terracotta); }
+  .ok-hero__wave { width: 120px; height: 12px; margin: var(--space-4) auto 0; }
+  .ok-hero__lede {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    line-height: 1.55;
+    max-width: 36rem;
+    margin: var(--space-4) auto 0;
+  }
+
+  .ok { background: var(--bg); }
+  .ok__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    max-width: 64rem;
+  }
+  @media (min-width: 1000px) {
+    .ok__inner { grid-template-columns: 1.5fr 1fr; gap: var(--space-12); }
+  }
+
+  .ok-summary {
+    background: var(--bg-soft);
+    border-radius: var(--r-lg);
+    padding: var(--space-8);
+  }
+  .ok-summary__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+  .ok-summary__label {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .ok-summary__number {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--terracotta);
+    font-weight: 500;
+    margin-top: 4px;
+  }
+  .ok-summary__meta { text-align: right; }
+  .ok-summary__date {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  .ok-summary__method {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--ink);
+    font-style: italic;
+    margin-top: 2px;
+  }
+  .ok-summary__wave { width: 60px; height: 12px; margin-block: var(--space-3) var(--space-6); }
+  .ok-summary__sub {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: var(--space-3);
+    margin-top: var(--space-6);
+  }
+  .ok-summary__sub:first-of-type { margin-top: 0; }
+
+  .ok-summary__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .ok-summary__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-3);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .ok-summary__item strong { color: var(--ink); font-weight: 500; }
+  .ok-summary__item em { color: var(--ink-mute); font-style: normal; }
+
+  .ok-summary__ship {
+    background: var(--bg);
+    border: 1px solid var(--bg-deep);
+    border-radius: var(--r-md);
+    padding: var(--space-4);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .ok-summary__ship strong { color: var(--ink); display: block; margin-bottom: 2px; }
+
+  .ok-summary__rows { display: flex; flex-direction: column; gap: 0.3rem; }
+  .ok-summary__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .ok-summary__row strong { font-family: var(--font-display); font-size: 1.1rem; color: var(--ink); font-weight: 500; }
+  .ok-summary__row--total {
+    border-top: 1px solid var(--bg-deep);
+    margin-top: var(--space-2);
+    padding-top: var(--space-3);
+  }
+  .ok-summary__row--total strong { font-size: 1.6rem; }
+
+  .ok-side {
+    background: var(--bg-soft);
+    border-radius: var(--r-lg);
+    padding: var(--space-6);
+    align-self: start;
+  }
+  .ok-side__title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--ink);
+  }
+  .ok-side__wave { width: 50px; height: 10px; margin-block: var(--space-3) var(--space-4); }
+  .ok-side__steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  .ok-side__steps li {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: var(--space-3);
+    align-items: flex-start;
+  }
+  .ok-side__num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--bg-deep);
+    color: var(--terracotta);
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ok-side__steps h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .ok-side__steps p {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--ink-mute);
+    line-height: 1.5;
+  }
+
+  .ok-side__cta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: stretch;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--bg-deep);
+  }
+  .ok-side__neworder {
+    align-self: center;
+  }
+</style>
+
+<script>
+  import { readLastOrder, clearLastOrder, formatPrice, type LastOrder } from '../../lib/checkout';
+
+  const order = readLastOrder();
+  if (!order) {
+    window.location.replace('/cesta');
+  } else {
+    const $ = (sel: string) => document.querySelector(sel) as HTMLElement | null;
+
+    // Head
+    $('[data-ok-number]')!.textContent = order.number;
+    const date = new Date(order.when);
+    $('[data-ok-date]')!.textContent = date.toLocaleDateString('es-ES', {
+      day: 'numeric', month: 'long', year: 'numeric',
+    });
+    $('[data-ok-method]')!.textContent = order.method === 'pickup' ? 'Recogida en taller' : 'Envío a domicilio';
+
+    // Items
+    $('[data-ok-items]')!.innerHTML = order.items.map((it) => `
+      <li class="ok-summary__item">
+        <span>${it.name} <em>× ${it.qty}</em></span>
+        <strong>${formatPrice(it.price * it.qty)}</strong>
+      </li>
+    `).join('');
+
+    // Shipping
+    const s = order.shipping;
+    $('[data-ok-ship]')!.innerHTML = `
+      <strong>${s.name}</strong>
+      ${s.address}${s.address2 ? ', ' + s.address2 : ''}<br />
+      ${s.postal} ${s.city}, ${s.province}<br />
+      ${s.country}<br />
+      ${s.phone} · ${s.email}
+    `;
+
+    // Totals
+    $('[data-ok-subtotal]')!.textContent = formatPrice(order.subtotal);
+    $('[data-ok-shipping]')!.textContent = order.shippingCost === 0 ? 'Gratis ✦' : formatPrice(order.shippingCost);
+    $('[data-ok-total]')!.textContent = formatPrice(order.total);
+  }
+
+  // "Hacer otro pedido" → limpia el last-order y va al catálogo
+  document.querySelector('[data-ok-new]')?.addEventListener('click', () => {
+    clearLastOrder();
+    window.location.href = '/catalogo';
+  });
+</script>

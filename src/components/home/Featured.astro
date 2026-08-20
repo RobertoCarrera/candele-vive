@@ -1,0 +1,71 @@
+---
+/**
+ * Featured — algunas velas destacadas en grid asimétrico.
+ */
+import { getCollection } from 'astro:content';
+import ProductCard from '../shop/ProductCard.astro';
+import Wave from '../decorative/Wave.astro';
+import { UI } from '../../data/ui';
+
+const allProducts = await getCollection('products');
+const featured = allProducts
+  .filter((p) => p.data.featured)
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
+  .slice(0, 6);
+
+const SHIFTS = ['none', 'down', 'up', 'none', 'down', 'up'];
+---
+
+<section class="featured section" aria-labelledby="featured-title">
+  <div class="container-wide">
+    <header class="featured__head">
+      <p class="eyebrow">{UI.home.featuredTagline}</p>
+      <h2 id="featured-title" class="featured__title">{UI.home.featuredTitle}</h2>
+      <Wave class="featured__wave" color="var(--terracotta)" />
+    </header>
+
+    <div class="featured__grid">
+      {featured.map((p, i) => (
+        <ProductCard
+          id={p.data.id}
+          name={p.data.name}
+          price={p.data.price}
+          category={p.data.category}
+          collection={p.data.collection}
+          image={p.data.image}
+          imageAlt={p.data.imageAlt}
+          burnTime={p.data.burnTime}
+          size={p.data.size}
+          badge={p.data.badge}
+          shortDescription={p.data.shortDescription}
+          order={p.data.order}
+          shift={SHIFTS[i] as 'up' | 'down' | 'none'}
+        />
+      ))}
+    </div>
+
+    <div class="featured__more">
+      <a href="/catalogo" class="btn-link">Ver las 19 velas →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured { background: var(--bg-soft); }
+  .featured__head { text-align: center; max-width: 38rem; margin-inline: auto; margin-bottom: var(--space-20); }
+  .featured__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1;
+    margin-top: var(--space-3);
+  }
+  .featured__wave { width: 120px; height: 12px; margin: var(--space-6) auto 0; }
+  .featured__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12) var(--space-6);
+  }
+  @media (min-width: 700px)  { .featured__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .featured__grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-16) var(--space-6); } }
+  .featured__more { text-align: center; margin-top: var(--space-16); }
+</style>

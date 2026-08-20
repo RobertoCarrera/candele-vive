@@ -1,0 +1,120 @@
+/**
+ * Strings de UI en español — versión "Domingo por la tarde".
+ * Tono: cercano, cálido, sin postureo. Como una amiga que te enseña su mesa.
+ */
+
+export const UI = {
+  nav: {
+    home: 'Inicio',
+    shop: 'Catálogo',
+    workshop: 'El taller',
+    contact: 'Contacto',
+    collections: 'Colecciones',
+    cart: 'Cesta',
+    search: 'Buscar',
+  },
+  buttons: {
+    addToCart: 'Añadir a la cesta',
+    addedToCart: 'En la cesta ✦',
+    viewCart: 'Ver la cesta',
+    checkout: 'Cerrar pedido',
+    continueShopping: 'Seguir mirando',
+    applyPromo: 'Aplicar',
+    sendMessage: 'Enviar',
+    sendWhatsapp: 'Enviar por WhatsApp',
+  },
+  cart: {
+    title: 'Tu cesta',
+    tagline: 'lo que llevas',
+    empty: 'Tu cesta está vacía',
+    emptyBody: 'No hay prisa. Cuando enciendas una, que sea la que te gusta de verdad.',
+    items: (n: number) => `${n} ${n === 1 ? 'vela' : 'velas'}`,
+    subtotal: 'Subtotal',
+    shipping: 'Envío',
+    shippingFree: 'Gratis ✦',
+    total: 'Total',
+    promo: 'Cupón',
+    promoPlaceholder: 'código…',
+    promoApplied: (code: string) => `${code} aplicado ✦`,
+    progressHint: (remaining: string) => `Te faltan ${remaining} para envío gratis`,
+    trustBadges: ['Envío gratis +50€', 'Hecho a mano', 'Cera de soja'],
+    summaryTitle: 'Resumen',
+    recommendationsTitle: 'Otras que nos gustan',
+    recommendationsTagline: 'por si te apetece mirar',
+  },
+  product: {
+    breadcrumb: { home: 'Inicio', shop: 'Catálogo' },
+    tabs: {
+      details: 'Detalles',
+      ingredients: 'Ingredientes',
+      shipping: 'Envío',
+    },
+    ingredients: [
+      'Cera de soja 100% natural',
+      'Mecha de algodón sin plomo',
+      'Mezcla de fragancias sin ftalatos',
+      'Aceites esenciales botánicos',
+      'Recipiente de vidrio reciclado',
+    ],
+    shippingInfo: [
+      'Los pedidos salen en 2-3 días hábiles a toda la Península y Baleares.',
+      'Envío gratis a partir de 50€. La caja es reciclable y sin plástico.',
+    ],
+    relatedTagline: 'de la misma colección',
+    relatedTitle: 'También te pueden gustar',
+    burnBadge: (time: string) => `arde ${time}`,
+    specs: { duration: 'Duración', size: 'Tamaño', wax: 'Cera', wick: 'Mecha' },
+  },
+  contact: {
+    title: 'Contacto',
+    tagline: 'escríbenos cuando quieras',
+    headline: 'Hablemos',
+    intro:
+      'Si tienes una duda sobre un pedido, quieres que te recomendemos un aroma, o te interesa vender nuestras velas en tu tienda, escríbenos. Respondemos siempre en menos de 24h.',
+    formTitle: 'Escríbenos',
+    fields: { name: 'Nombre', email: 'Email', subject: 'Asunto', message: 'Mensaje' },
+    placeholders: { name: 'Cómo te llamas', email: 'tu@email.com', message: 'Cuéntanos' },
+    subjects: ['Duda sobre un pedido', 'Recomendación de aroma', 'Ventas al por mayor', 'Otros'],
+    hoursEmail: 'Respondemos en 24-48h hábiles',
+    hoursPhone: 'L-V de 10:00 a 18:00h',
+    success: '¡Genial! Te respondemos pronto ✦',
+  },
+  footer: {
+    tagline:
+      'Hacemos velas a mano en pequeños lotes, con cera de soja y fragancias sin prisa. Desde Vilanova i la Geltrú, para tu casa.',
+    collectionsTitle: 'Colecciones',
+    companyTitle: 'La casa',
+    newsletterTitle: 'Una carta al mes',
+    newsletterCopy:
+      'Una vez al mes te escribimos con nuevos aromas, el making-of de las velas y alguna sorpresa. Sin spam, sin prisa.',
+    newsletterPlaceholder: 'tu correo',
+    legal: ['Aviso legal', 'Privacidad', 'Cookies', 'Envíos'],
+    copyright: (year: number) => `hecho a mano · ${year} · Candele Vive`,
+  },
+  workshop: {
+    title: 'El taller',
+    tagline: 'donde se hacen',
+    headline: 'Una mesa, una cocina, mucho rato',
+    intro:
+      'Cada vela Candele Vive se hace en nuestro taller de Vilanova i la Geltrú. Trabajamos con cera de soja 100% natural, mechas de algodón y fragancias sin ftalatos, infusionadas con aceites esenciales.',
+  },
+  home: {
+    heroEyebrow: 'vela · cera · calma',
+    heroTitle: 'Velas hechas en casa, para tu casa',
+    heroBody:
+      'Vertemos cada vela a mano, en pequeños lotes, con cera de soja y fragancias sin prisa. La encoges cuando quieres, la apagas cuando puedes.',
+    perksTitle: 'tres cosas que siempre hacemos igual',
+    collectionsTagline: 'lo que tenemos ahora',
+    collectionsTitle: 'Estas son las velas',
+    featuredTagline: 'algunas favoritas',
+    featuredTitle: 'Las que más se encienden',
+    storyEyebrow: 'cómo empezó',
+    storyTitle: 'Una cocina, una tarde, una idea',
+    testimonialsTitle: 'Lo que nos cuentan',
+    testimonialsTagline: 'de quien ya tiene una',
+    shippingTitle: 'Envío gratis a partir de 50€',
+    shippingBody: 'Recibe tus velas en 2-3 días hábiles en cualquier punto de la Península y Baleares. La caja es reciclable y sin plástico.',
+  },
+  whatsapp: { tooltip: 'Escríbenos por WhatsApp' },
+  errors: { productNotFound: 'Vela no encontrada' },
+} as const;

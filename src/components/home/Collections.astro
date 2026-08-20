@@ -1,0 +1,174 @@
+---
+/**
+ * Collections — 5 familias de aromas, cada una con su imagen de hero
+ * (R2) o, si no está subida, la primera vela de la colección.
+ */
+import { getCollection } from 'astro:content';
+import Wave from '../decorative/Wave.astro';
+import { collectionHero, type CollectionSlug } from '../../lib/images';
+import { UI } from '../../data/ui';
+
+const collections = (await getCollection('collections'))
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+
+const allProducts = await getCollection('products');
+
+const featuredByCollection = Object.fromEntries(
+  collections.map((c) => {
+    const p = allProducts
+      .filter((x) => x.data.collection === c.data.slug)
+      .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))[0];
+    return [c.data.slug, p];
+  })
+);
+
+// Asimetría: la 2ª card baja, la 4ª sube, etc.
+const SHIFTS = ['none', 'down', 'none', 'up', 'none'];
+---
+
+<section class="collections section" aria-labelledby="collections-title">
+  <div class="container-wide">
+    <header class="collections__head">
+      <p class="eyebrow">{UI.home.collectionsTagline}</p>
+      <h2 id="collections-title" class="collections__title">
+        {UI.home.collectionsTitle}
+      </h2>
+      <p class="collections__lede">
+        Cinco familias de aromas. Una por estación, y una quinta para los aromas
+        que no se dejan encasillar.
+      </p>
+      <Wave class="collections__wave" color="var(--terracotta)" />
+    </header>
+
+    <ul class="collections__grid">
+      {collections.map((c, i) => {
+        const p = featuredByCollection[c.data.slug];
+        const shift = SHIFTS[i] ?? 'none';
+        const heroImg = collectionHero(c.data.slug as CollectionSlug);
+        return (
+          <li class="collections__item" data-shift={shift}>
+            <a href={`/coleccion/${c.slug}`} class="collections__card">
+              <div class="collections__media">
+                <img
+                  src={heroImg}
+                  alt={p ? p.data.imageAlt : `Colección ${c.data.name}`}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class="collections__body">
+                <p class="collections__season">{c.data.season}</p>
+                <h3 class="collections__name">{c.data.name}</h3>
+                {c.data.heroTagline && <p class="collections__tag">{c.data.heroTagline}</p>}
+                <span class="collections__cta">ver {c.data.name} →</span>
+              </div>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .collections { background: var(--bg); }
+  .collections__head {
+    text-align: center;
+    max-width: 38rem;
+    margin-inline: auto;
+    margin-bottom: var(--space-16);
+  }
+  .collections__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1;
+    margin-top: var(--space-3);
+    color: var(--ink);
+  }
+  .collections__lede {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-top: var(--space-4);
+  }
+  .collections__wave { width: 120px; height: 12px; margin: var(--space-6) auto 0; }
+
+  .collections__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12) var(--space-6);
+  }
+  @media (min-width: 700px)  { .collections__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-16) var(--space-6); } }
+  @media (min-width: 1100px) { .collections__grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .collections__item[data-shift="up"]   { transform: translateY(-2rem); }
+  .collections__item[data-shift="down"] { transform: translateY(2rem); }
+  @media (max-width: 700px) {
+    .collections__item[data-shift="up"], .collections__item[data-shift="down"] { transform: none; }
+  }
+
+  .collections__card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .collections__media {
+    background: var(--bg-soft);
+    border-radius: var(--r-lg);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    box-shadow: var(--sh-2);
+    margin-bottom: var(--space-4);
+    transition: box-shadow 0.6s var(--ease-soft);
+  }
+  .collections__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s var(--ease-soft);
+  }
+  .collections__card:hover .collections__media {
+    box-shadow: var(--sh-3);
+  }
+  .collections__card:hover .collections__media img {
+    transform: scale(1.04);
+  }
+  .collections__body { text-align: center; }
+  .collections__season {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: var(--space-2);
+  }
+  .collections__name {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: var(--space-2);
+    transition: color 0.4s var(--ease-soft);
+  }
+  .collections__card:hover .collections__name { color: var(--terracotta); }
+  .collections__tag {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 0.95rem;
+    margin-bottom: var(--space-3);
+  }
+  .collections__cta {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--terracotta);
+    text-transform: lowercase;
+  }
+</style>

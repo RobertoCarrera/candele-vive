@@ -87,7 +87,18 @@ const studioLinks = [
     </div>
 
     <div class="ft__base">
-      <p class="ft__copy-mini">{UI.footer.copyright(year)}</p>
+      <p class="ft__copy-mini">
+        {UI.footer.copyright(year)}
+        <span class="ft__byline" aria-hidden="true">·</span>
+        <a
+          href="https://sincronia.agency/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="ft__credit"
+        >
+          creada por sincronía.agency →
+        </a>
+      </p>
       <div class="ft__base-right">
         <button
           type="button"
@@ -231,6 +242,25 @@ const studioLinks = [
     font-size: 0.75rem;
     color: var(--ink-mute);
     letter-spacing: 0.04em;
+  }
+  .ft__byline {
+    margin: 0 0.5em;
+    color: var(--ink-faint);
+  }
+  .ft__credit {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    letter-spacing: 0;
+    border-bottom: 1px solid var(--bg-deep);
+    padding-bottom: 1px;
+    transition: color 0.3s var(--ease-soft), border-color 0.3s var(--ease-soft);
+  }
+  .ft__credit:hover {
+    color: var(--terracotta);
+    border-bottom-color: var(--terracotta);
   }
   .ft__base-right {
     display: flex;

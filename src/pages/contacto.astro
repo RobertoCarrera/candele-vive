@@ -4,8 +4,6 @@ import Wave from '../components/decorative/Wave.astro';
 import { SITE, whatsappLink, whatsappDisplay } from '../data/site';
 import { UI } from '../data/ui';
 
-const subjects = UI.contact.subjects;
-
 const jsonLd: Record<string, unknown>[] = [
   {
     '@context': 'https://schema.org',
@@ -100,37 +98,28 @@ const jsonLd: Record<string, unknown>[] = [
         </div>
       </aside>
 
-      <form class="ct-form" data-contact-form>
-        <h2 class="ct-form__title">{UI.contact.formTitle}</h2>
-
-        <div class="ct-form__row">
-          <label class="ct-field">
-            <span>{UI.contact.fields.name}</span>
-            <input type="text" name="name" required placeholder={UI.contact.placeholders.name} autocomplete="name" />
-          </label>
-          <label class="ct-field">
-            <span>{UI.contact.fields.email}</span>
-            <input type="email" name="email" required placeholder={UI.contact.placeholders.email} autocomplete="email" />
-          </label>
-        </div>
-
-        <label class="ct-field">
-          <span>{UI.contact.fields.subject}</span>
-          <select name="subject" required>
-            {subjects.map((s, i) => <option value={s} selected={i === 0}>{s}</option>)}
-          </select>
-        </label>
-
-        <label class="ct-field">
-          <span>{UI.contact.fields.message}</span>
-          <textarea name="message" required placeholder={UI.contact.placeholders.message} rows="6"></textarea>
-        </label>
-
-        <div class="ct-form__cta">
-          <button type="submit" class="btn btn-primary">{UI.buttons.sendMessage}</button>
-          <p class="ct-form__status" data-contact-status hidden>{UI.contact.success}</p>
-        </div>
-      </form>
+      <div class="ct-form">
+        <h2 class="ct-form__title">Escríbenos por WhatsApp</h2>
+        <p class="ct-form__lede">
+          Es lo más rápido. Solemos contestar en menos de dos horas durante
+          el horario del taller, y si nos escribes por la noche te leemos
+          a primera hora del día siguiente.
+        </p>
+        <a
+          class="btn btn-primary ct-form__whatsapp"
+          href={whatsappLink('Hola, me gustaría haceros una pregunta sobre una vela Candele Vive ✦')}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M12 2C6.48 2 2 6.48 2 12c0 1.94.55 3.74 1.49 5.27L2 22l4.84-1.46A9.96 9.96 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.6 14.2c-.24.66-1.38 1.27-1.94 1.34-.5.07-1.13.1-1.83-.12-.42-.13-.96-.31-1.66-.61-2.93-1.27-4.84-4.24-4.99-4.44-.15-.2-1.18-1.57-1.18-2.99s.75-2.12 1.01-2.41c.26-.29.57-.36.77-.36.2 0 .39 0 .56.01.18.01.42-.07.66.5.24.58.82 2 1.01 2.16.07.14.13.31.02.5-.1.2-.15.31-.29.49-.15.18-.31.39-.45.52-.15.15-.31.31-.13.6.18.29.77 1.27 1.66 2.06 1.13 1 2.09 1.32 2.37 1.47.29.15.46.13.63-.07.18-.2.73-.85.92-1.14.2-.29.39-.24.66-.15.27.1 1.71.81 2.01.96.29.15.49.22.56.34.07.12.07.71-.17 1.39z"/>
+          </svg>
+          Abrir WhatsApp · {whatsappDisplay()}
+        </a>
+        <p class="ct-form__alt">
+          Si lo prefieres, escríbenos a <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </p>
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -211,36 +200,49 @@ const jsonLd: Record<string, unknown>[] = [
     background: var(--bg);
     border-radius: var(--r-lg);
     padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
   .ct-form__title {
     font-family: var(--font-display);
     font-size: 1.6rem;
     font-style: italic;
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-4);
+    color: var(--ink);
   }
-  .ct-form__row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
-  }
-  @media (min-width: 600px) { .ct-form__row { grid-template-columns: 1fr 1fr; } }
-  .ct-field { display: block; margin-bottom: var(--space-4); }
-  .ct-form__cta { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; margin-top: var(--space-4); }
-  .ct-form__status {
+  .ct-form__lede {
     font-family: var(--font-display);
-    font-style: italic;
-    color: var(--sage);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    margin-bottom: var(--space-6);
+    max-width: 36rem;
+  }
+  .ct-form__whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1rem 1.5rem;
     font-size: 0.95rem;
+  }
+  .ct-form__alt {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--ink-mute);
+    margin-top: var(--space-4);
+  }
+  .ct-form__alt a {
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--bg-deep);
+  }
+  .ct-form__alt a:hover {
+    color: var(--terracotta);
+    border-bottom-color: var(--terracotta);
   }
 </style>
 
 <script>
-  const form = document.querySelector('[data-contact-form]');
-  const status = document.querySelector('[data-contact-status]');
-  form?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (!status) return;
-    status.hidden = false;
-    (form as HTMLFormElement).reset();
-  });
+  // El formulario de contacto se ha sustituido por un CTA directo a WhatsApp.
+  // No hay lógica de cliente: el enlace `wa.me` abre el chat con un mensaje pre-rellenado.
 </script>

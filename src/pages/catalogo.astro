@@ -15,9 +15,29 @@ const SHIFTS = ['none', 'down', 'up', 'none', 'down', 'up', 'none', 'down', 'up'
 
 const title = 'Catálogo · velas hechas a mano';
 const description = 'Todas las velas Candele Vive en un solo lugar. Filtra por colección o por intención, encuentra tu próxima favorita.';
+
+const catalogFaqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: '¿Cuántas velas tiene el catálogo?', acceptedAnswer: { '@type': 'Answer', text: '19 velas divididas en 5 colecciones: Ánima (5), Radice (4), Luce (6), Solea (4) y Especiales (3).' } },
+    { '@type': 'Question', name: '¿Cómo filtro las velas por estado de ánimo?', acceptedAnswer: { '@type': 'Answer', text: 'En la barra de filtros del catálogo puedes elegir la colección (Ánima, Radice, Luce, Solea, Especiales) y la intención (Relax, Energía, Hogar, Conexión, Naturaleza). Los filtros se combinan.' } },
+    { '@type': 'Question', name: '¿Qué incluye la Colección Especiales?', acceptedAnswer: { '@type': 'Answer', text: 'La Colección Especiales reúne velas rituales de cera de abeja (Colección Miele), una vela de masaje con aceite de argán (Carezza) y un kit DIY para crear tu propia vela (Rituale).' } },
+    { '@type': 'Question', name: '¿Puedo comprar al por mayor?', acceptedAnswer: { '@type': 'Answer', text: 'Sí, trabajamos con tiendas de diseño y concept stores. Escríbenos a hola@candelevive.es con el asunto "Mayoristas" y te pasamos dossier y lista de precios.' } },
+  ],
+};
+
+const catalogBreadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Catálogo', item: SITE.url + '/catalogo' },
+  ],
+};
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} jsonLd={[catalogBreadcrumbJsonLd, catalogFaqJsonLd]}>
   <header class="cat-hero">
     <div class="container">
       <p class="eyebrow cat-hero__eyebrow">el libro completo</p>
@@ -88,6 +108,41 @@ const description = 'Todas las velas Candele Vive en un solo lugar. Filtra por c
             />
           </li>
         ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="cat-faq section">
+    <div class="container cat-faq__inner">
+      <header class="cat-faq__head">
+        <p class="eyebrow">preguntas frecuentes</p>
+        <h2 class="cat-faq__title">Sobre el catálogo</h2>
+      </header>
+      <ul class="cat-faq__list" data-faq>
+        <li>
+          <details class="cat-faq__item">
+            <summary><span>¿Cuántas velas tiene el catálogo?</span><span class="cat-faq__chev" aria-hidden="true">↓</span></summary>
+            <div><p>19 velas divididas en 5 colecciones: Ánima (5), Radice (4), Luce (6), Solea (4) y Especiales (3).</p></div>
+          </details>
+        </li>
+        <li>
+          <details class="cat-faq__item">
+            <summary><span>¿Cómo filtro por estado de ánimo?</span><span class="cat-faq__chev" aria-hidden="true">↓</span></summary>
+            <div><p>En la barra de filtros elige colección y la intención (Relax, Energía, Hogar, Conexión, Naturaleza). Los filtros se combinan: por ejemplo, "Luce + Relax" te muestra las velas de la colección Luce pensadas para descansar.</p></div>
+          </details>
+        </li>
+        <li>
+          <details class="cat-faq__item">
+            <summary><span>¿Qué incluye la Colección Especiales?</span><span class="cat-faq__chev" aria-hidden="true">↓</span></summary>
+            <div><p>Velas rituales de cera de abeja (Colección Miele), vela de masaje con aceite de argán (Carezza) y kit DIY para crear tu propia vela (Rituale). Productos sin temporada fija.</p></div>
+          </details>
+        </li>
+        <li>
+          <details class="cat-faq__item">
+            <summary><span>¿Puedo comprar al por mayor?</span><span class="cat-faq__chev" aria-hidden="true">↓</span></summary>
+            <div><p>Sí, trabajamos con tiendas de diseño y concept stores. Escríbenos a hola@candelevive.es con el asunto "Mayoristas".</p></div>
+          </details>
+        </li>
       </ul>
     </div>
   </section>
@@ -212,6 +267,50 @@ const description = 'Todas las velas Candele Vive en un solo lugar. Filtra por c
   @media (min-width: 640px)  { .cat-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1000px) { .cat-grid { grid-template-columns: repeat(3, 1fr); } }
   .cat-grid li.is-hidden { display: none; }
+
+  /* === FAQ del catálogo === */
+  .cat-faq { background: var(--bg-soft); }
+  .cat-faq__inner { max-width: 44rem; }
+  .cat-faq__head { text-align: center; margin-bottom: var(--space-8); }
+  .cat-faq__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    color: var(--ink);
+    margin-top: var(--space-3);
+  }
+  .cat-faq__list { display: flex; flex-direction: column; }
+  .cat-faq__item {
+    border-top: 1px solid var(--bg-deep);
+    padding-block: var(--space-5);
+  }
+  .cat-faq__item:last-child { border-bottom: 1px solid var(--bg-deep); }
+  .cat-faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    line-height: 1.4;
+    color: var(--ink);
+    list-style: none;
+  }
+  .cat-faq__item summary::-webkit-details-marker { display: none; }
+  .cat-faq__item summary:hover { color: var(--terracotta); }
+  .cat-faq__chev {
+    flex-shrink: 0;
+    color: var(--terracotta);
+    transition: transform 0.3s var(--ease-soft);
+  }
+  .cat-faq__item[open] .cat-faq__chev { transform: rotate(180deg); }
+  .cat-faq__item div {
+    margin-top: var(--space-3);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
 </style>
 
 <script>

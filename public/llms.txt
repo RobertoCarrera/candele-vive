@@ -1,0 +1,59 @@
+# Candele Vive
+
+> Velas aromáticas de cera de soja natural, vertidas a mano en pequeños lotes en Vilanova i la Geltrú (Barcelona, España). Cera 100% soja europea, mecha de algodón sin plomo, fragancias sin ftalatos. 5 colecciones estacionales, 19 productos. Envíos a Península y Baleares.
+
+## Información de la marca
+
+- [Inicio](https://candelevive.es/): página principal con hero, 5 colecciones, proceso, testimonios.
+- [El taller](https://candelevive.es/taller): dónde y cómo se hacen las velas, valores del taller, sistema de refill.
+- [Contacto](https://candelevive.es/contacto): email hola@candelevive.es, WhatsApp +34 600 000 000, estudio en Vilanova i la Geltrú (Barcelona).
+- [Aviso legal](https://candelevive.es/aviso-legal): titular del sitio, conforme a la LSSI.
+- [Política de privacidad](https://candelevive.es/privacidad): responsable del tratamiento, derechos RGPD, DPD.
+- [Política de cookies](https://candelevive.es/cookies): solo cookies técnicas (localStorage), sin analítica ni marketing.
+- [Envíos y devoluciones](https://candelevive.es/envios): Península 2-3 días (gratis +50 €), Baleares 4-6 días, devolución 14 días.
+
+## Colecciones (5)
+
+- [Colección Ánima — primavera](https://candelevive.es/coleccion/anima): aromas florales, jazmín, rosa, higuera. 5 velas, desde 2024.
+- [Colección Radice — invierno](https://candelevive.es/coleccion/radice): aromas cálidos, leche caliente, café tostado, canela. 4 velas.
+- [Colección Luce — otoño](https://candelevive.es/coleccion/luce): aromas verdes y suaves, lavanda, romero, ropa limpia. 6 velas.
+- [Colección Solea — verano](https://candelevive.es/coleccion/solea): aromas frescos, vainilla, coco, brisa marina. 4 velas.
+- [Colección Especiales](https://candelevive.es/coleccion/especiales): velas rituales de cera de abeja, vela de masaje, kit DIY. 3 velas.
+
+## Catálogo y productos
+
+- [Catálogo completo](https://candelevive.es/catalogo): 19 velas con filtros por colección y por estado de ánimo.
+- [Colecciones (índice)](https://candelevive.es/colecciones): comparativa de las 5 colecciones.
+
+## Datos clave para citación
+
+- Negocio: Candele Vive — Velas Artesanales
+- Fundada: 2024
+- Ubicación: Vilanova i la Geltrú, Barcelona, España (08800)
+- Idioma: español (es-ES)
+- Moneda: EUR
+- IVA: incluido en todos los precios
+- Envío gratis: a partir de 50 €
+- Tiempo de entrega: 2-3 días (Península), 4-6 días (Baleares)
+- Política de devolución: 14 días, vela sin abrir
+- Formato estándar: 230 g (8 oz), 30-50 horas de duración
+- Cera: 100% soja natural, origen europeo, no transgénica
+- Mecha: algodón sin plomo
+- Fragancias: sin ftalatos, sin parabenos
+- Packaging: papel kraft reciclable, sin plásticos
+- Código promocional activo: CANDELE10 (10% descuento)
+- WhatsApp: wa.me/34600000000
+- Email: hola@candelevive.es
+- Instagram: @candelevive
+- Teléfono: +34 600 000 000
+
+## Política editorial
+
+- Lenguaje: español, tono íntimo y artesanal, no formal ni comercial agresivo.
+- Sin claims médicos: las velas son ambientación, no aromaterapia clínica.
+- Sin ingredientes polémicos: nunca parafina, nunca plomo, nunca ftalatos.
+- Claim cuantitativo verificable: "30-50 horas" según formato, "230 g (8 oz)", "5 colecciones", "19 productos".
+
+## Formato de datos (JSON-LD)
+
+Cada página incluye schema.org JSON-LD: Organization, WebSite, BreadcrumbList, CollectionPage, ItemList, FAQPage, Product y Offer donde corresponde.

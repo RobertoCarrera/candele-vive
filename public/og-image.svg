@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F4EEE0"/>
+      <stop offset="100%" stop-color="#E8DCC0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.8" cy="0.2" r="0.6">
+      <stop offset="0%" stop-color="#E2A996" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#E2A996" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Fondo -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Vela (forma simple) -->
+  <g transform="translate(880, 220)">
+    <!-- Frasco -->
+    <path d="M 30 60 Q 30 50 40 50 L 140 50 Q 150 50 150 60 L 145 280 Q 145 300 125 300 L 55 300 Q 35 300 35 280 Z"
+          fill="#F8F1E0" stroke="#C25B43" stroke-width="2" opacity="0.95"/>
+    <!-- Cera -->
+    <path d="M 50 100 L 130 100 L 128 270 Q 128 280 118 280 L 62 280 Q 52 280 52 270 Z"
+          fill="#E8DCC0" opacity="0.9"/>
+    <!-- Mecha -->
+    <line x1="90" y1="100" x2="90" y2="55" stroke="#2D211B" stroke-width="1.5"/>
+    <!-- Llama -->
+    <ellipse cx="90" cy="42" rx="6" ry="14" fill="#E2A996" opacity="0.95"/>
+    <ellipse cx="90" cy="38" rx="3" ry="7" fill="#FFD89E"/>
+  </g>
+
+  <!-- Texto: marca -->
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#2D211B">
+    <text x="80" y="200" font-size="92" font-weight="500" font-style="italic" letter-spacing="-2">
+      Candele
+    </text>
+    <text x="370" y="200" font-size="92" font-weight="400" letter-spacing="-2">
+      <tspan fill="#C25B43">·</tspan>vive
+    </text>
+  </g>
+
+  <!-- Subtítulo -->
+  <text x="80" y="280" font-family="Inter, system-ui, sans-serif" font-size="28" fill="#5A4A3E" letter-spacing="1">
+    Velas hechas a mano, en pequeños lotes
+  </text>
+
+  <!-- Colecciones (chips) -->
+  <g font-family="Inter, system-ui, sans-serif" font-size="18" fill="#5A4A3E" letter-spacing="1.5">
+    <text x="80" y="370" font-size="14" fill="#84917A" letter-spacing="3">5 COLECCIONES</text>
+    <text x="80" y="410">ÁNIMA · RADICE · LUCE · SOLEA · ESPECIALES</text>
+  </g>
+
+  <!-- Pie -->
+  <g font-family="Inter, system-ui, sans-serif" font-size="16" fill="#5A4A3E">
+    <text x="80" y="560">candelevive.es</text>
+    <text x="1080" y="560" text-anchor="end" fill="#C25B43">Vilanova i la Geltrú</text>
+  </g>
+
+  <!-- Trazo decorativo -->
+  <path d="M 80 595 Q 200 590 320 595 T 560 595" stroke="#C25B43" stroke-width="1.2" fill="none" opacity="0.6"/>
+</svg>

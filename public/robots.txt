@@ -1,0 +1,33 @@
+# robots.txt — Candele Vive
+# Bloquea páginas de checkout (específicas de usuario) y archivos internos.
+# Permite todo lo demás para que los LLMs/Google indexen el contenido.
+
+User-agent: *
+Allow: /
+
+# Páginas de checkout y confirmación: específicas de cada usuario
+Disallow: /cesta
+Disallow: /cesta/
+
+# API y admin (si los hubiera en el futuro)
+Disallow: /api/
+Disallow: /_astro/
+
+# Sitemap
+Sitemap: https://candelevive.es/sitemap-index.xml
+
+# Bots de IA: bienvenidos explícitamente (GEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /

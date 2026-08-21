@@ -7,13 +7,44 @@ import Story from '../components/home/Story.astro';
 import Process from '../components/home/Process.astro';
 import Testimonials from '../components/home/Testimonials.astro';
 import Shipping from '../components/home/Shipping.astro';
+import HomeFaq from '../components/home/HomeFaq.astro';
 import { SITE } from '../data/site';
+
+const homeFaqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: '¿Cuánto duran las velas Candele Vive?', acceptedAnswer: { '@type': 'Answer', text: 'Entre 30 y 50 horas de combustión, según el formato. Las velas estándar de 230 g (8 oz) duran unas 45 horas con los cuidados recomendados.' } },
+    { '@type': 'Question', name: '¿De qué están hechas las velas?', acceptedAnswer: { '@type': 'Answer', text: 'Cera de soja 100% natural de origen europeo, mecha de algodón sin plomo, fragancias sin ftalatos infusionadas con aceites esenciales. No usamos parafina, parabenos ni plomo.' } },
+    { '@type': 'Question', name: '¿Cuánto tarda un envío?', acceptedAnswer: { '@type': 'Answer', text: 'En Península, 2-3 días laborables. En Baleares, 4-6 días. Los pedidos antes de las 14:00 salen el mismo día. Envío gratis a partir de 50 €.' } },
+    { '@type': 'Question', name: '¿Puedo devolver una vela si no me convence?', acceptedAnswer: { '@type': 'Answer', text: 'Tienes 14 días para devolver una vela sin abrir conforme a la normativa europea de consumo. Si la has encendido y no te convence el aroma, escríbenos por WhatsApp y te regalamos otra.' } },
+    { '@type': 'Question', name: '¿Las velas sirven para aromaterapia?', acceptedAnswer: { '@type': 'Answer', text: 'Sí. Las velas Candele Vive son ambientación con fragancias de calidad: crean atmósfera, ayudan a relajarte y acompañar rituales personales. No son un producto médico ni sustituyen tratamientos clínicos.' } },
+  ],
+};
+
+// Schema adicional para el home: ItemList con las 5 colecciones
+// (entra en el carrusel/bloque visual) y WebPage con primaryImageOfPage.
+const homeCollectionsJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Colecciones Candele Vive',
+  description: 'Las 5 colecciones de velas aromáticas de Candele Vive, agrupadas por estación.',
+  numberOfItems: 5,
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Ánima', url: SITE.url + '/coleccion/anima' },
+    { '@type': 'ListItem', position: 2, name: 'Radice', url: SITE.url + '/coleccion/radice' },
+    { '@type': 'ListItem', position: 3, name: 'Luce', url: SITE.url + '/coleccion/luce' },
+    { '@type': 'ListItem', position: 4, name: 'Solea', url: SITE.url + '/coleccion/solea' },
+    { '@type': 'ListItem', position: 5, name: 'Especiales', url: SITE.url + '/coleccion/especiales' },
+  ],
+};
 ---
 
 <BaseLayout
   title={SITE.name + ' · ' + SITE.tagline}
   description={SITE.description}
   bodyClass="page-home"
+  jsonLd={[homeFaqJsonLd, homeCollectionsJsonLd]}
 >
   <Hero />
   <Collections />
@@ -22,4 +53,5 @@ import { SITE } from '../data/site';
   <Process />
   <Testimonials />
   <Shipping />
+  <HomeFaq />
 </BaseLayout>

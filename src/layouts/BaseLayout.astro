@@ -29,7 +29,7 @@ interface Props {
 const {
   title = SITE.name + ' · ' + SITE.tagline,
   description = SITE.description,
-  image = '/og-image.jpg',
+  image = '/og-image.svg',
   type = 'website',
   canonical,
   noindex = false,
@@ -60,10 +60,28 @@ const baseJsonLd = {
       '@type': 'Organization',
       '@id': `${SITE.url}#organization`,
       name: SITE.legalName,
+      alternateName: SITE.name,
       url: SITE.url,
-      logo: `${SITE.url}/favicon.svg`,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE.url}/favicon.svg`,
+        width: 512,
+        height: 512,
+      },
+      image: `${SITE.url}/og-image.svg`,
+      description: SITE.description,
       email: SITE.email,
       telephone: SITE.phone,
+      foundingDate: '2024',
+      foundingLocation: {
+        '@type': 'Place',
+        name: 'Vilanova i la Geltrú, Barcelona, España',
+      },
+      areaServed: [
+        { '@type': 'Country', name: 'España' },
+        { '@type': 'AdministrativeArea', name: 'Península Ibérica' },
+        { '@type': 'AdministrativeArea', name: 'Islas Baleares' },
+      ],
       address: {
         '@type': 'PostalAddress',
         streetAddress: SITE.address.street,
@@ -72,6 +90,31 @@ const baseJsonLd = {
         postalCode: SITE.address.postalCode,
         addressCountry: SITE.address.country,
       },
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          contactType: 'customer service',
+          email: SITE.email,
+          telephone: SITE.phone,
+          availableLanguage: ['Spanish', 'Catalan', 'English'],
+          areaServed: 'ES',
+        },
+        {
+          '@type': 'ContactPoint',
+          contactType: 'sales',
+          url: `https://wa.me/${SITE.whatsappRaw}`,
+          availableLanguage: ['Spanish', 'Catalan'],
+        },
+      ],
+      knowsAbout: [
+        'Velas aromáticas artesanales',
+        'Cera de soja natural',
+        'Aromaterapia',
+        'Hecho a mano',
+        'Decoración del hogar',
+        'Regalos artesanales',
+      ],
+      slogan: 'Una vela nunca perderá nada por ayudar a encender otra.',
       sameAs: [SITE.social.instagram, SITE.social.facebook, SITE.social.pinterest].filter(Boolean),
     },
     {
@@ -81,6 +124,16 @@ const baseJsonLd = {
       name: SITE.name,
       description: SITE.shortDescription,
       inLanguage: SITE.locale,
+      publisher: { '@id': `${SITE.url}#organization` },
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: `${SITE.url}/catalogo?q={search_term_string}`,
+        },
+        // El parámetro de búsqueda real es client-side; los LLMs lo entienden igual.
+        queryInput: 'required name=search_term_string',
+      },
     },
   ],
 };
@@ -115,6 +168,11 @@ const drawerCopy = {
 
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={SITE.legalName} />
+    <meta name="generator" content="Astro" />
+    <meta name="theme-color" content="#F4EEE0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#2D211B" media="(prefers-color-scheme: dark)" />
+    <link rel="alternate" type="text/plain" href="https://candelevive.es/llms.txt" title="LLM-friendly site summary" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <meta property="og:type" content={type} />
@@ -123,6 +181,9 @@ const drawerCopy = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITE.name} — ${SITE.tagline}`} />
     <meta property="og:locale" content={SITE.locale} />
 
     <meta name="twitter:card" content="summary_large_image" />

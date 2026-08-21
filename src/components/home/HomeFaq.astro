@@ -1,0 +1,117 @@
+---
+/**
+ * HomeFaq — 5 preguntas frecuentes con esquema FAQPage.
+ * Preguntas pensadas para resolver objeciones de compra y dar
+ * información citables (GEO).
+ */
+const faqs = [
+  {
+    q: '¿Cuánto duran las velas Candele Vive?',
+    a: 'Entre 30 y 50 horas de combustión, según el formato. Las velas estándar de 230 g (8 oz) duran unas 45 horas con los cuidados recomendados.',
+  },
+  {
+    q: '¿De qué están hechas las velas?',
+    a: 'Cera de soja 100% natural de origen europeo, mecha de algodón sin plomo, fragancias sin ftalatos infusionadas con aceites esenciales. No usamos parafina, parabenos ni plomo.',
+  },
+  {
+    q: '¿Cuánto tarda un envío?',
+    a: 'En Península, 2-3 días laborables. En Baleares, 4-6 días. Los pedidos antes de las 14:00 salen el mismo día. Envío gratis a partir de 50 €.',
+  },
+  {
+    q: '¿Puedo devolver una vela si no me convence?',
+    a: 'Tienes 14 días para devolver una vela sin abrir conforme a la normativa europea de consumo. Si la has encendido y no te convence el aroma, escríbenos por WhatsApp y te regalamos otra.',
+  },
+  {
+    q: '¿Las velas sirven para aromaterapia?',
+    a: 'Sí. Las velas Candele Vive son ambientación con fragancias de calidad: crean atmósfera, ayudan a relajarte y acompañar rituales personales. No son un producto médico ni sustituyen tratamientos clínicos.',
+  },
+];
+---
+<section class="home-faq section" aria-labelledby="home-faq-title">
+  <div class="container home-faq__inner">
+    <header class="home-faq__head">
+      <p class="eyebrow">preguntas frecuentes</p>
+      <h2 id="home-faq-title" class="home-faq__title">Lo que siempre nos preguntáis</h2>
+    </header>
+
+    <ul class="home-faq__list" data-faq>
+      {faqs.map((f) => (
+        <li>
+          <details class="home-faq__item">
+            <summary class="home-faq__q">
+              <span>{f.q}</span>
+              <span class="home-faq__chev" aria-hidden="true">↓</span>
+            </summary>
+            <div class="home-faq__a">
+              <p>{f.a}</p>
+            </div>
+          </details>
+        </li>
+      ))}
+    </ul>
+
+    <p class="home-faq__more">
+      ¿Más dudas? <a href="/taller#faq">Lee las preguntas completas en El Taller</a> o
+      <a href="/contacto">escríbenos</a>.
+    </p>
+  </div>
+</section>
+
+<style>
+  .home-faq { background: var(--bg-soft); }
+  .home-faq__inner { max-width: 44rem; }
+  .home-faq__head { text-align: center; margin-bottom: var(--space-10); }
+  .home-faq__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    line-height: 1.2;
+    color: var(--ink);
+    margin-top: var(--space-3);
+  }
+  .home-faq__list { display: flex; flex-direction: column; }
+  .home-faq__item {
+    border-top: 1px solid var(--bg-deep);
+    padding-block: var(--space-5);
+  }
+  .home-faq__item:last-child { border-bottom: 1px solid var(--bg-deep); }
+  .home-faq__q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: var(--ink);
+    list-style: none;
+  }
+  .home-faq__q::-webkit-details-marker { display: none; }
+  .home-faq__q:hover { color: var(--terracotta); }
+  .home-faq__chev {
+    flex-shrink: 0;
+    color: var(--terracotta);
+    transition: transform 0.3s var(--ease-soft);
+    font-size: 1.1rem;
+  }
+  details[open] .home-faq__chev { transform: rotate(180deg); }
+  .home-faq__a {
+    margin-top: var(--space-3);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  .home-faq__more {
+    margin-top: var(--space-8);
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--ink-mute);
+  }
+  .home-faq__more a {
+    color: var(--terracotta);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

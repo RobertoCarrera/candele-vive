@@ -16,12 +16,43 @@ interface Props {
   description: string;
   lastUpdated: string; // formato "agosto 2026"
   effectiveDate: string; // formato "20 de agosto de 2026"
+  slug: string; // para BreadcrumbList (aviso-legal, privacidad, cookies, envios)
+  dateModified: string; // ISO (YYYY-MM-DD) para JSON-LD
 }
 
-const { title, description, lastUpdated, effectiveDate } = Astro.props;
+const { title, description, lastUpdated, effectiveDate, slug, dateModified } = Astro.props;
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE.url + '/' },
+    { '@type': 'ListItem', position: 2, name: title, item: `${SITE.url}/${slug}` },
+  ],
+};
+
+// WebPage con dateModified: a Google le gusta ver páginas legales
+// actualizadas explícitamente (señal de compliance).
+const webPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${SITE.url}/${slug}#webpage`,
+  url: `${SITE.url}/${slug}`,
+  name: `${title} | ${SITE.name}`,
+  description,
+  inLanguage: SITE.locale,
+  isPartOf: { '@id': SITE.url + '#website' },
+  datePublished: '2026-08-20',
+  dateModified,
+  publisher: { '@id': SITE.url + '#organization' },
+};
 ---
 
-<BaseLayout title={`${title} | ${SITE.name}`} description={description} noindex={true}>
+<BaseLayout
+  title={`${title} | ${SITE.name}`}
+  description={description}
+  jsonLd={[breadcrumbJsonLd, webPageJsonLd]}
+>
   <header class="legal-hero">
     <div class="container legal-hero__inner">
       <p class="eyebrow">Información legal</p>

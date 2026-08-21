@@ -30,9 +30,29 @@ const faqs = [
     a: 'Sí, trabajamos con tiendas de diseño y concept stores. Escríbenos a hola@candelevive.es con el asunto "Mayoristas" y te pasamos dossier y lista de precios.',
   },
 ];
+
+const tallerJsonLd: Record<string, unknown>[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'El taller', item: SITE.url + '/taller' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={UI.workshop.title} description={UI.workshop.intro}>
+<BaseLayout title={UI.workshop.title} description={UI.workshop.intro} jsonLd={tallerJsonLd}>
   <header class="ws-hero">
     <div class="container ws-hero__inner">
       <p class="eyebrow">{UI.workshop.tagline}</p>

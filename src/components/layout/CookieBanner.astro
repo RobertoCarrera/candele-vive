@@ -1,0 +1,248 @@
+---
+/**
+ * CookieBanner — RGPD / LSSI.
+ *
+ * Mínimo, dos botones a la misma altura: Aceptar / Rechazar.
+ * El script de Clarity SOLO se carga si el usuario acepta.
+ * El consentimiento se guarda en localStorage y se re-escucha
+ * en navegaciones SPA (astro:after-swap).
+ *
+ * Eventos:
+ *   - cookie:open  → vuelve a mostrar el banner (enlace del footer)
+ *   - cookie:change → emitido al cambiar preferencias (otros scripts pueden escucharlo)
+ */
+---
+
+<div
+  class="cookie-banner"
+  data-cookie-banner
+  hidden
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="cookie-banner-title"
+  aria-describedby="cookie-banner-desc"
+>
+  <div class="cookie-banner__inner">
+    <div class="cookie-banner__copy">
+      <p class="cookie-banner__title" id="cookie-banner-title">
+        ¿Te importa que veamos cómo usas la web?
+      </p>
+      <p class="cookie-banner__body" id="cookie-banner-desc">
+        Usamos una herramienta (<strong>Microsoft Clarity</strong>) para entender qué
+        páginas funcionan y cuáles no. No te identifica personalmente. Las cookies
+        técnicas de la cesta ya están activas porque son necesarias.
+        <a href="/cookies" class="cookie-banner__link">Más info</a>
+      </p>
+    </div>
+    <div class="cookie-banner__actions">
+      <button
+        type="button"
+        class="btn btn-secondary cookie-banner__btn"
+        data-cookie-action="rejected"
+      >
+        Rechazar
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary cookie-banner__btn"
+        data-cookie-action="accepted"
+      >
+        Aceptar
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cookie-banner {
+    position: fixed;
+    left: 50%;
+    bottom: var(--space-4);
+    transform: translateX(-50%);
+    z-index: 80;
+    width: min(calc(100% - var(--space-8)), 38rem);
+    background: var(--bg-soft);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-3);
+    padding: var(--space-6);
+    color: var(--ink);
+    animation: cookie-banner-in 0.5s var(--ease-soft) both;
+  }
+  @media (min-width: 700px) {
+    .cookie-banner {
+      left: auto;
+      right: var(--space-6);
+      bottom: var(--space-6);
+      transform: none;
+      width: 26rem;
+      padding: var(--space-6) var(--space-6) var(--space-4);
+    }
+  }
+
+  @keyframes cookie-banner-in {
+    from { opacity: 0; transform: translate(-50%, 24px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+  }
+  @media (min-width: 700px) {
+    @keyframes cookie-banner-in {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  }
+
+  .cookie-banner__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .cookie-banner__title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: var(--space-2);
+  }
+
+  .cookie-banner__body {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .cookie-banner__body strong {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .cookie-banner__link {
+    color: var(--terracotta);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    margin-left: 0.2em;
+  }
+  .cookie-banner__link:hover { color: var(--terracotta-deep); }
+
+  .cookie-banner__actions {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-1);
+  }
+  .cookie-banner__actions .btn {
+    flex: 1;
+    padding: 0.7rem 1rem;
+    font-size: 0.78rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cookie-banner { animation: none; }
+  }
+</style>
+
+<script>
+  /**
+   * Consentimiento RGPD — clave en localStorage.
+   *
+   * Versión 1: solo Clarity (analítica). Si añades marketing,
+   * incrementa la versión para que el banner vuelva a salir.
+   */
+  const STORAGE_KEY = 'candele-cookie-consent';
+  const CONSENT_VERSION = 1;
+  const CLARITY_ID = 'y5ua7e4oby';
+
+  type ConsentStatus = 'accepted' | 'rejected';
+  interface Consent {
+    status: ConsentStatus;
+    version: number;
+    timestamp: string;
+  }
+
+  const readConsent = (): Consent | null => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as Consent;
+      if (parsed.version !== CONSENT_VERSION) return null;
+      if (parsed.status !== 'accepted' && parsed.status !== 'rejected') return null;
+      return parsed;
+    } catch {
+      return null;
+    }
+  };
+
+  const writeConsent = (status: ConsentStatus): Consent => {
+    const value: Consent = {
+      status,
+      version: CONSENT_VERSION,
+      timestamp: new Date().toISOString(),
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+    (window as unknown as { __candeleConsent?: Consent }).__candeleConsent = value;
+    return value;
+  };
+
+  const loadClarity = (): void => {
+    if (document.querySelector(`script[data-clarity="loaded"]`)) return;
+    const s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.async = true;
+    s.src = `https://www.clarity.ms/tag/${CLARITY_ID}`;
+    s.dataset.clarity = 'loaded';
+    document.head.appendChild(s);
+  };
+
+  const show = (banner: HTMLElement): void => {
+    banner.hidden = false;
+  };
+  const hide = (banner: HTMLElement): void => {
+    banner.hidden = true;
+  };
+
+  const setup = (): void => {
+    const banner = document.querySelector<HTMLElement>('[data-cookie-banner]');
+    if (!banner) return;
+
+    // Si estamos en la página de cookies, no molestamos: ya están leyendo la política.
+    if (location.pathname.replace(/\/$/, '') === '/cookies') {
+      hide(banner);
+      return;
+    }
+
+    const current = readConsent();
+
+    if (current) {
+      (window as unknown as { __candeleConsent?: Consent }).__candeleConsent = current;
+      if (current.status === 'accepted') loadClarity();
+      hide(banner);
+      return;
+    }
+
+    // Sin consentimiento previo: mostrar tras un respiro para que la web cargue primero.
+    window.setTimeout(() => show(banner), 900);
+
+    banner.addEventListener('click', (e) => {
+      const target = e.target;
+      if (!(target instanceof HTMLElement)) return;
+      const action = target.closest<HTMLElement>('[data-cookie-action]')?.dataset.cookieAction as ConsentStatus | undefined;
+      if (!action) return;
+      const consent = writeConsent(action);
+      if (consent.status === 'accepted') loadClarity();
+      hide(banner);
+      window.dispatchEvent(new CustomEvent('cookie:change', { detail: consent }));
+    });
+
+    window.addEventListener('cookie:open', () => {
+      show(banner);
+    });
+  };
+
+  // Astro SPA: re-montar tras navegación.
+  document.addEventListener('astro:page-load', setup);
+  document.addEventListener('astro:after-swap', setup);
+  // Fallback si Astro no está disponible (build estático puro).
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+</script>

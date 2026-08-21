@@ -2,10 +2,10 @@
 /**
  * Política de cookies — Cumplimiento de la LSSI y RGPD.
  *
- * El sitio web de Candele Vive utiliza únicamente cookies técnicas
- * necesarias para su funcionamiento (por ejemplo, recordar el contenido
- * de la cesta de la compra). No utiliza cookies de analítica ni de
- * marketing en este momento.
+ * El sitio web de Candele Vive utiliza cookies técnicas (necesarias
+ * para la cesta y el proceso de compra) y, sólo si el usuario da su
+ * consentimiento a través del banner, cookies de analítica (Microsoft
+ * Clarity) que nos ayudan a entender cómo se usa la web.
  */
 import LegalPage from '../components/legal/LegalPage.astro';
 import { SITE } from '../data/site';
@@ -15,9 +15,9 @@ import { SITE } from '../data/site';
   title="Política de cookies"
   description="Qué cookies usa el sitio web de Candele Vive y cómo puedes gestionarlas."
   slug="cookies"
-  dateModified="2026-08-20"
+  dateModified="2026-08-21"
   lastUpdated="agosto 2026"
-  effectiveDate="20 de agosto de 2026"
+  effectiveDate="21 de agosto de 2026"
 >
   <h2>1. ¿Qué son las cookies?</h2>
   <p>
@@ -29,8 +29,19 @@ import { SITE } from '../data/site';
   </p>
 
   <h2>2. ¿Qué cookies usa este sitio?</h2>
-  <p>Este sitio utiliza exclusivamente <strong>cookies técnicas</strong>, que son las estrictamente necesarias para su funcionamiento. En concreto:</p>
+  <p>
+    Este sitio utiliza <strong>cookies técnicas</strong>, estrictamente
+    necesarias para su funcionamiento, y, <strong>sólo si das tu
+    consentimiento</strong> a través del banner, cookies de
+    <strong>analítica</strong>. En ningún caso usamos cookies de marketing
+    o publicidad personalizada.
+  </p>
 
+  <h3>2.1 Cookies técnicas (siempre activas)</h3>
+  <p>
+    No requieren consentimiento porque son imprescindibles para que la
+    web funcione. Sin ellas, la cesta no podría mantenerse entre páginas.
+  </p>
   <table>
     <thead>
       <tr><th>Cookie</th><th>Tipo</th><th>Finalidad</th><th>Duración</th></tr>
@@ -60,35 +71,65 @@ import { SITE } from '../data/site';
         <td>Recuerda si ya has visto el tooltip del botón de WhatsApp para no mostrarlo de nuevo.</td>
         <td>Persistente</td>
       </tr>
+      <tr>
+        <td><code>candele-cookie-consent</code></td>
+        <td>Técnica (propia)</td>
+        <td>Guarda tu decisión sobre el banner de cookies (aceptar/rechazar) para no volver a pedirlo.</td>
+        <td>Persistente (1 año)</td>
+      </tr>
     </tbody>
   </table>
 
+  <h3>2.2 Cookies de analítica (sólo con tu consentimiento)</h3>
+  <p>
+    Si aceptas el banner, usamos <strong>Microsoft Clarity</strong>, una
+    herramienta que nos ayuda a entender cómo navegas por la web
+    (qué páginas funcionan, dónde se atasca la gente, etc.). La
+    información es agregada y no te identifica personalmente.
+  </p>
+  <table>
+    <thead>
+      <tr><th>Servicio</th><th>Proveedor</th><th>Finalidad</th><th>Duración</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Clarity (<code>_clck</code>, <code>_clsk</code>, <code>CLID</code>, <code>ANID</code>, <code>MR</code>)</td>
+        <td>Microsoft Ireland Operations Ltd. (transferencia fuera del EEE, cláusulas contractuales tipo de la UE)</td>
+        <td>Mapas de calor, reproducción de sesiones anonimizadas y métricas de uso agregadas.</td>
+        <td>Hasta 1 año</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    Más información sobre cómo trata Microsoft estos datos en
+    <a href="https://privacy.microsoft.com/es-es/privacystatement" target="_blank" rel="noopener">la política de privacidad de Microsoft</a>
+    y en
+    <a href="https://learn.microsoft.com/es-es/clarity/faq" target="_blank" rel="noopener">la documentación de Clarity</a>.
+  </p>
+
   <p class="legal-callout">
-    <strong>Importante:</strong> en este momento <strong>no usamos cookies
-    de analítica ni de marketing</strong>. Si en el futuro incorporamos
-    alguna (por ejemplo, Google Analytics o Meta Pixel), actualizaremos
-    esta política y solicitaremos tu consentimiento antes de hacerlo.
+    <strong>Importante:</strong> <strong>no usamos cookies de marketing</strong>
+    (Meta Pixel, Google Ads, TikTok Pixel, etc.). Si en el futuro
+    incorporamos alguna, actualizaremos esta política y solicitaremos
+    tu consentimiento antes de hacerlo.
   </p>
 
-  <h2>3. ¿Por qué solo cookies técnicas?</h2>
+  <h2>3. ¿Por qué necesitas aceptar para la analítica?</h2>
   <p>
-    Las cookies técnicas son <strong>estrictamente necesarias</strong> para
-    que el sitio funcione (por ejemplo, sin la cookie <code>candele-cart</code>
-    no podríamos mantener tu cesta entre páginas). Según el RGPD y la
-    LSSI, este tipo de cookies <strong>no requieren consentimiento
-    previo</strong> del usuario, aunque sigue siendo obligatorio informar
-    de su uso en esta política.
+    Las cookies técnicas están siempre activas porque sin ellas el sitio
+    no puede funcionar (por ejemplo, sin <code>candele-cart</code> no
+    podríamos mantener tu cesta). Las cookies de analítica, en cambio,
+    <strong>no son imprescindibles</strong> y, según el RGPD y la LSSI,
+    requieren tu consentimiento previo. Por eso te las pedimos a través
+    del banner que aparece la primera vez que entras.
   </p>
-
-  <h2>4. Cookies de terceros</h2>
   <p>
-    En este momento no usamos cookies de terceros (Google Analytics,
-    Meta Pixel, Hotjar, etc.). Si en el futuro decides añadirlas, lo
-    avisaremos con un banner de consentimiento y actualizaremos esta
-    política antes de hacerlo.
+    Puedes cambiar tu decisión en cualquier momento desde el enlace
+    <strong>"Configurar cookies"</strong> que aparece al pie de cada
+    página.
   </p>
 
-  <h2>5. ¿Cómo gestionar las cookies?</h2>
+  <h2>4. ¿Cómo gestionar o desactivar las cookies?</h2>
   <p>
     Puedes configurar tu navegador para que rechace todas las cookies o
     avise antes de instalarlas. Ten en cuenta que, si desactivas las
@@ -104,15 +145,15 @@ import { SITE } from '../data/site';
     <li><a href="https://support.microsoft.com/es-es/microsoft-edge/delete-cookies-microsoft-edge" target="_blank" rel="noopener">Microsoft Edge</a></li>
   </ul>
 
-  <h2>6. Cambios en esta política</h2>
+  <h2>5. Cambios en esta política</h2>
   <p>
-    Si en el futuro introducimos cookies que requieran consentimiento
-    (analítica, marketing, etc.), actualizaremos esta política y mostraremos
-    un banner para que puedas aceptarlas o rechazarlas antes de que se
-    instalen.
+    Si en el futuro introducimos nuevas cookies que requieran
+    consentimiento, actualizaremos esta política y volveremos a
+    mostrarte el banner para que puedas aceptarlas o rechazarlas antes
+    de que se instalen.
   </p>
 
-  <h2>7. Más información</h2>
+  <h2>6. Más información</h2>
   <p>
     Si tienes dudas sobre el uso de cookies en este sitio, escríbenos a
     <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.

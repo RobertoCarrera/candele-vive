@@ -88,11 +88,20 @@ const studioLinks = [
 
     <div class="ft__base">
       <p class="ft__copy-mini">{UI.footer.copyright(year)}</p>
-      <ul class="ft__legal">
-        {UI.footer.legal.map((label) => (
-          <li><a href={`/${label.toLowerCase().replace(/ /g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '')}`} class="ft__legal-link">{label}</a></li>
-        ))}
-      </ul>
+      <div class="ft__base-right">
+        <button
+          type="button"
+          class="ft__legal-link ft__cookies-btn"
+          data-cookie-open
+        >
+          Configurar cookies
+        </button>
+        <ul class="ft__legal">
+          {UI.footer.legal.map((label) => (
+            <li><a href={`/${label.toLowerCase().replace(/ /g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '')}`} class="ft__legal-link">{label}</a></li>
+          ))}
+        </ul>
+      </div>
     </div>
   </div>
 </footer>
@@ -223,11 +232,28 @@ const studioLinks = [
     color: var(--ink-mute);
     letter-spacing: 0.04em;
   }
+  .ft__base-right {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+  @media (min-width: 700px) {
+    .ft__base-right { justify-content: flex-end; }
+  }
   .ft__legal {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-4);
     justify-content: center;
+  }
+  .ft__cookies-btn {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
   }
   .ft__legal-link {
     font-size: 0.72rem;
@@ -256,5 +282,11 @@ const studioLinks = [
     status.hidden = false;
     status.textContent = '¡Gracias! Te escribimos pronto ✦';
     form.reset();
+  });
+
+  // Re-abrir el banner de cookies desde el footer.
+  const cookieBtn = document.querySelector('[data-cookie-open]');
+  cookieBtn?.addEventListener('click', () => {
+    window.dispatchEvent(new CustomEvent('cookie:open'));
   });
 </script>

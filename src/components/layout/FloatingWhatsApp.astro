@@ -20,7 +20,20 @@ const phone = whatsappDisplay();
   <svg viewBox="0 0 32 32" width="24" height="24" fill="currentColor" aria-hidden="true">
     <path d="M16 3C8.82 3 3 8.82 3 16c0 2.4.66 4.66 1.81 6.6L3 29l6.6-1.73A12.96 12.96 0 0 0 16 29c7.18 0 13-5.82 13-13S23.18 3 16 3zm7.36 18.46c-.31.86-1.78 1.62-2.5 1.71-.64.08-1.45.12-2.34-.15-.54-.16-1.23-.39-2.12-.78-3.74-1.62-6.17-5.4-6.36-5.65-.19-.25-1.5-2-1.5-3.81s.95-2.7 1.29-3.07c.34-.36.74-.46.99-.46s.49 0 .71.01c.23.01.54-.09.84.64.31.74 1.05 2.55 1.14 2.74.09.19.15.4.03.65-.12.25-.19.4-.37.62-.19.22-.39.49-.56.66-.19.19-.38.39-.16.76.22.37.97 1.6 2.08 2.59 1.43 1.27 2.63 1.67 3 1.86.37.19.59.16.8-.1.22-.25.92-1.07 1.16-1.44.25-.37.49-.31.83-.19.34.12 2.18 1.03 2.55 1.22.37.19.62.28.71.43.09.16.09.92-.22 1.78z" />
   </svg>
-  <span class="floating-whatsapp__tip">{UI.whatsapp.tooltip} · {phone}</span>
+  <span class="floating-whatsapp__tip">
+    <span class="floating-whatsapp__tip-text">{UI.whatsapp.tooltip} · {phone}</span>
+    <button
+      type="button"
+      class="floating-whatsapp__tip-close"
+      aria-label="No volver a mostrar este mensaje"
+      data-whatsapp-tip-close
+    >
+      <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="4" y1="4" x2="12" y2="12" />
+        <line x1="12" y1="4" x2="4" y2="12" />
+      </svg>
+    </button>
+  </span>
 </a>
 
 <style>
@@ -54,16 +67,47 @@ const phone = whatsappDisplay();
     background: var(--ink);
     color: var(--bg-soft);
     font-size: 0.75rem;
-    padding: 0.5rem 0.85rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.85rem;
     border-radius: var(--r-pill);
     white-space: nowrap;
     pointer-events: none;
     opacity: 0;
     transform: translateY(-50%) translateX(6px);
     transition: opacity 0.3s var(--ease-soft), transform 0.3s var(--ease-soft);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     /* Llamar la atención: aparece tras 1.5s, hace wiggle cada 6s */
     animation: tip-in 0.5s 1.5s var(--ease) forwards,
                tip-wiggle 1.2s 5s var(--ease-soft) 3;
+  }
+  .floating-whatsapp__tip-text {
+    pointer-events: none;
+  }
+  .floating-whatsapp__tip-close {
+    /* Re-habilita clicks dentro del tooltip, que por defecto es pointer-events: none */
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.08);
+    border: 0;
+    border-radius: 50%;
+    color: var(--bg-soft);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s var(--ease-soft), background 0.2s var(--ease-soft);
+  }
+  .floating-whatsapp__tip-close:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.18);
+  }
+  .floating-whatsapp__tip-close:focus-visible {
+    outline: 2px solid var(--terracotta-soft);
+    outline-offset: 2px;
   }
   /* Flechita del tooltip */
   .floating-whatsapp__tip::after {
@@ -108,17 +152,28 @@ const phone = whatsappDisplay();
 </style>
 
 <script>
-  // Marcar el FAB como "visto" al primer click para que el tooltip no vuelva a salir.
-  // Persistente en localStorage para no molestar en visitas siguientes.
+  // Marcar el FAB como "visto" al primer click (o al cerrar el tooltip con la X)
+  // para que no vuelva a salir. Persistente en localStorage.
+  const STORAGE_KEY = 'candele-whatsapp-tip-seen';
+  const dismiss = (fab: Element) => {
+    fab.classList.add('is-dismissed');
+    try { localStorage.setItem(STORAGE_KEY, '1'); } catch {}
+  };
+
   const fab = document.querySelector('.floating-whatsapp');
   if (fab) {
-    if (localStorage.getItem('candele-whatsapp-tip-seen') === '1') {
+    if (localStorage.getItem(STORAGE_KEY) === '1') {
       fab.classList.add('is-dismissed');
     } else {
-      fab.addEventListener('click', () => {
-        fab.classList.add('is-dismissed');
-        try { localStorage.setItem('candele-whatsapp-tip-seen', '1'); } catch {}
-      }, { once: true });
+      // Click en el FAB → abrir WhatsApp y recordar para no mostrar más.
+      fab.addEventListener('click', () => dismiss(fab), { once: true });
+      // Click en la X del tooltip → cerrar y recordar SIN abrir WhatsApp.
+      const closeBtn = fab.querySelector('[data-whatsapp-tip-close]');
+      closeBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dismiss(fab);
+      });
     }
   }
 </script>

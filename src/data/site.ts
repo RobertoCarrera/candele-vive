@@ -14,8 +14,8 @@ export const SITE = {
     'Velas aromáticas hechas a mano con cera de soja natural y fragancias sin prisa. Vertidas una a una en nuestro taller de Vilanova i la Geltrú. Envíos a Península y Baleares.',
   locale: 'es-ES',
   email: 'hola@candelevive.es',
-  phone: '+34 600 000 000',
-  whatsappRaw: '34600000000',
+  phone: '+34 612 20 61 72',
+  whatsappRaw: '34612206172',
   address: {
     street: 'Estudio Privado (Recogida con Cita Previa)',
     locality: 'Vilanova i la Geltrú',
@@ -40,7 +40,7 @@ export const whatsappLink = (text: string): string =>
 export const whatsappDisplay = (): string => {
   const raw = SITE.whatsappRaw;
   if (raw.length === 11 && raw.startsWith('34')) {
-    return `+${raw.slice(0, 2)} ${raw.slice(2, 5)} ${raw.slice(5, 8)} ${raw.slice(8)}`;
+    return `+${raw.slice(0, 2)} ${raw.slice(2, 5)} ${raw.slice(5, 7)} ${raw.slice(7, 9)} ${raw.slice(9)}`;
   }
   return `+${raw}`;
 };

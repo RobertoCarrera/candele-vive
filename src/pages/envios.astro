@@ -9,7 +9,7 @@
  * el titular antes de publicar.
  */
 import LegalPage from '../components/legal/LegalPage.astro';
-import { SITE } from '../data/site';
+import { SITE, whatsappDisplay } from '../data/site';
 ---
 
 <LegalPage
@@ -175,6 +175,6 @@ import { SITE } from '../data/site';
   </p>
   <ul>
     <li>Email: <a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
-    <li>WhatsApp: <a href={`https://wa.me/${SITE.whatsappRaw}`}>+{SITE.whatsappRaw.slice(0, 2)} {SITE.whatsappRaw.slice(2, 5)} {SITE.whatsappRaw.slice(5, 8)} {SITE.whatsappRaw.slice(8)}</a></li>
+    <li>WhatsApp: <a href={`https://wa.me/${SITE.whatsappRaw}`}>{whatsappDisplay()}</a></li>
   </ul>
 </LegalPage>

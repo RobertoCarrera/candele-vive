@@ -86,19 +86,21 @@ const studioLinks = [
       </section>
     </div>
 
+    <a
+      class="ft__creator"
+      href="https://sincronia.agency/contacto/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span class="ft__creator-text">
+        Somos los <em>creadores</em> de esta web.
+        <em>¿La quieres para ti?</em>
+      </span>
+      <span class="ft__creator-arrow" aria-hidden="true">→</span>
+    </a>
+
     <div class="ft__base">
-      <p class="ft__copy-mini">
-        {UI.footer.copyright(year)}
-        <span class="ft__byline" aria-hidden="true">·</span>
-        <a
-          href="https://sincronia.agency/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="ft__credit"
-        >
-          creada por sincronía.agency →
-        </a>
-      </p>
+      <p class="ft__copy-mini">{UI.footer.copyright(year)}</p>
       <div class="ft__base-right">
         <button
           type="button"
@@ -249,24 +251,60 @@ const studioLinks = [
     color: var(--ink-mute);
     letter-spacing: 0.04em;
   }
-  .ft__byline {
-    margin: 0 0.5em;
-    color: var(--ink-faint);
-  }
-  .ft__credit {
+
+  .ft__creator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-block: var(--space-10) var(--space-8);
+    padding: 1.1rem 1.5rem;
+    background: var(--ink);
+    color: var(--bg-soft);
+    border-radius: var(--r-pill);
+    text-decoration: none;
     font-family: var(--font-display);
     font-style: italic;
-    font-size: 0.85rem;
-    color: var(--ink-soft);
-    text-decoration: none;
-    letter-spacing: 0;
-    border-bottom: 1px solid var(--bg-deep);
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    line-height: 1.35;
+    transition: background 0.3s var(--ease-soft), transform 0.3s var(--ease-soft);
+  }
+  .ft__creator:hover {
+    background: var(--terracotta);
+    color: var(--bg-soft);
+    transform: translateY(-1px);
+  }
+  .ft__creator:focus-visible {
+    outline: 2px solid var(--terracotta-soft);
+    outline-offset: 3px;
+  }
+  .ft__creator em {
+    font-style: italic;
+    color: var(--terracotta-soft);
+    border-bottom: 1.5px solid var(--terracotta-soft);
     padding-bottom: 1px;
     transition: color 0.3s var(--ease-soft), border-color 0.3s var(--ease-soft);
   }
-  .ft__credit:hover {
-    color: var(--terracotta);
-    border-bottom-color: var(--terracotta);
+  .ft__creator:hover em {
+    color: var(--bg-soft);
+    border-bottom-color: var(--bg-soft);
+  }
+  .ft__creator-arrow {
+    flex-shrink: 0;
+    font-style: normal;
+    font-family: var(--font-body);
+    font-size: 1.3rem;
+    transition: transform 0.3s var(--ease-soft);
+  }
+  .ft__creator:hover .ft__creator-arrow {
+    transform: translateX(4px);
+  }
+  @media (max-width: 600px) {
+    .ft__creator {
+      padding: 1rem 1.2rem;
+      font-size: 0.95rem;
+    }
+    .ft__creator-arrow { font-size: 1.1rem; }
   }
   .ft__base-right {
     display: flex;

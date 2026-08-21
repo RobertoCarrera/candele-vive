@@ -1,0 +1,127 @@
+---
+/**
+ * Aviso legal — Cumplimiento de la LSSI (Ley 34/2002, de 11 de julio,
+ * de Servicios de la Sociedad de la Información y de Comercio Electrónico).
+ *
+ * BASE LEGAL: los datos del titular marcados con __PLACEHOLDER__ deben ser
+ * revisados y completados por el cliente (o su gestoría) antes de publicar.
+ * El resto del texto es plantilla legalmente válida para un ecommerce
+ * español de venta directa al consumidor.
+ */
+import LegalPage from '../components/legal/LegalPage.astro';
+import { SITE } from '../data/site';
+---
+
+<LegalPage
+  title="Aviso legal"
+  description="Aviso legal e información general del sitio web de Candele Vive, conforme a la LSSI."
+  lastUpdated="agosto 2026"
+  effectiveDate="20 de agosto de 2026"
+>
+  <h2>1. Datos identificativos del titular</h2>
+  <p>
+    En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de
+    Servicios de la Sociedad de la Información y de Comercio Electrónico
+    (LSSI), se informa al usuario que el sitio web <strong>{SITE.url}</strong>
+    es titularidad de:
+  </p>
+  <ul>
+    <li><strong>Titular:</strong> {SITE.legalName}</li>
+    <li><strong>NIF/CIF:</strong> <span style="background:var(--bg-warm);padding:0 0.4em;border-radius:4px;">__NIF__</span> (dato pendiente de confirmar por el titular)</li>
+    <li><strong>Domicilio fiscal:</strong> {SITE.address.street}, {SITE.address.postalCode} {SITE.address.locality} ({SITE.address.region}), {SITE.address.country === 'ES' ? 'España' : SITE.address.country}</li>
+    <li><strong>Email de contacto:</strong> <a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+    <li><strong>Teléfono:</strong> {SITE.phone}</li>
+    <li><strong>Actividad:</strong> Fabricación y venta de velas artesanales y productos aromáticos a través de comercio electrónico.</li>
+  </ul>
+
+  <h2>2. Objeto y ámbito de aplicación</h2>
+  <p>
+    El presente aviso legal regula el acceso, la navegación y el uso de los
+    contenidos publicados en el sitio web <strong>{SITE.url}</strong>, así
+    como en sus subdominios y dominios relacionados. La utilización del sitio
+    atribuye la condición de usuario y comporta la aceptación de todas las
+    cláusulas contenidas en este aviso, en la <a href="/privacidad">política
+    de privacidad</a> y en la <a href="/cookies">política de cookies</a>,
+    en su versión publicada en cada momento.
+  </p>
+
+  <h2>3. Propiedad intelectual e industrial</h2>
+  <p>
+    Todos los contenidos del sitio —textos, fotografías, gráficos, imágenes,
+    vídeos, marcos sonoros, animaciones, software, ilustraciones, código
+    fuente, así como el diseño gráfico y el código fuente HTML, CSS y
+    JavaScript— son propiedad de {SITE.legalName} o de los terceros que
+    han cedido sus derechos, y están protegidos por la normativa nacional e
+    internacional en materia de propiedad intelectual e industrial.
+  </p>
+  <p>
+    La marca <strong>Candele Vive</strong>, el logotipo y el nombre comercial
+    son signos distintivos registrados. Queda prohibida su reproducción,
+    distribución, comunicación pública o transformación sin autorización
+    previa y por escrito del titular.
+  </p>
+  <p>
+    El usuario puede visualizar y obtener una copia privada de los contenidos
+    para su uso personal. Cualquier otro uso requiere el consentimiento
+    expreso del titular.
+  </p>
+
+  <h2>4. Régimen de responsabilidad</h2>
+  <p>
+    El titular no garantiza la disponibilidad ininterrumpida ni el
+    funcionamiento correcto del sitio web, ni la ausencia de virus u otros
+    componentes dañinos. Tampoco será responsable de los daños o
+    perjuicios derivados de:
+  </p>
+  <ul>
+    <li>La imposibilidad de acceso al sitio o la interrupción del servicio.</li>
+    <li>La presencia de virus, malware o cualquier otro elemento lesivo.</li>
+    <li>El uso indebido del sitio por parte de terceros no autorizados.</li>
+    <li>La información publicada por terceros o enlazada desde sitios externos.</li>
+  </ul>
+
+  <h2>5. Enlaces a terceros</h2>
+  <p>
+    El sitio puede contener enlaces a sitios web de terceros. El titular no
+    se responsabiliza del contenido, las políticas de privacidad o las
+    prácticas de dichos sitios. La inclusión de estos enlaces no implica
+    ninguna asociación, respaldo o colaboración con sus titulares.
+  </p>
+
+  <h2>6. Precios e impuestos</h2>
+  <p>
+    Los precios de los productos expuestos en el sitio se muestran en euros
+    e incluyen el Impuesto sobre el Valor Añadido (IVA) aplicable. Los
+    gastos de envío, en su caso, se detallan en la
+    <a href="/envios">política de envíos</a> y se desglosan en el
+    proceso de compra antes de su confirmación.
+  </p>
+
+  <h2>7. Comunicaciones comerciales</h2>
+  <p>
+    Las comunicaciones promocionales o publicitarias enviadas al usuario se
+    realizan únicamente tras su consentimiento expreso, conforme al
+    artículo 21 de la LSSI. El usuario puede revocar dicho consentimiento en
+    cualquier momento siguiendo las instrucciones incluidas en cada
+    comunicación o escribiéndonos a <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+  </p>
+
+  <h2>8. Ley aplicable y jurisdicción</h2>
+  <p>
+    El presente aviso legal se rige por la legislación española y europea
+    aplicable. Para la resolución de las controversias que pudieran
+    derivarse de su interpretación o aplicación, las partes se someten
+    expresamente a los Juzgados y Tribunales de la ciudad de
+    <strong>{SITE.address.locality}</strong> ({SITE.address.region}),
+    salvo en los supuestos en los que la normativa procesal o de consumo
+    fije imperativamente otro fuero distinto.
+  </p>
+
+  <h2>9. Modificaciones</h2>
+  <p>
+    El titular se reserva el derecho de modificar el presente aviso legal
+    para adaptarlo a novedades legislativas o jurisprudenciales. En caso
+    de modificación, se publicará una nueva versión con la fecha de su
+    última actualización.
+  </p>
+</LegalPage>

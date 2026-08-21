@@ -2,35 +2,78 @@
 /**
  * Navbar — limpia, sin adornos. Logo a la izquierda, navegación al centro,
  * cesta a la derecha. Aparece con un fondo translúcido al hacer scroll.
+ * "Colecciones" tiene un mega menu en hover con las 5 colecciones.
  */
+import { getCollection } from 'astro:content';
 import { SITE } from '../../data/site';
 import { UI } from '../../data/ui';
+import { IMG } from '../../lib/images';
+import { COLLECTIONS_CONTENT } from '../../data/collections-content';
 
 const navItems = [
-  { href: '/colecciones', label: 'Colecciones' },
+  { href: '/colecciones', label: 'Colecciones', hasMega: true },
   { href: '/catalogo', label: UI.nav.shop },
   { href: '/taller', label: UI.nav.workshop },
   { href: '/contacto', label: UI.nav.contact },
 ];
+
+// Datos para el mega menu: nombre (del .md) + nota principal + nº velas (del SEO)
+const allCollections = await getCollection('collections');
+const megaItems = allCollections
+  .map((c) => {
+    const seo = COLLECTIONS_CONTENT[c.data.slug as keyof typeof COLLECTIONS_CONTENT];
+    return {
+      slug: c.data.slug,
+      name: c.data.name,
+      note: seo?.scentProfile.primary ?? '',
+      count: seo?.candleCount ?? 0,
+      season: seo?.season ?? '',
+    };
+  })
+  .sort((a, b) => a.name.localeCompare(b.name));
 ---
 
 <header class="nav" data-nav>
   <div class="container-wide nav__inner">
     <a href="/" class="nav__brand" aria-label={`${SITE.name} · ${UI.nav.home}`}>
+      <img
+        src={IMG.logo.primary}
+        alt=""
+        class="nav__brand-logo"
+        width="36"
+        height="36"
+        loading="eager"
+      />
       <span class="nav__brand-text">Candele<span class="nav__brand-dot">·</span><em>vive</em></span>
     </a>
 
     <nav class="nav__links" aria-label="Navegación principal">
       {navItems.map((item) => (
-        <a href={item.href} class="nav__link" data-nav-link={item.href}>{item.label}</a>
+        <div class="nav__item" data-mega={item.hasMega ? 'collections' : null}>
+          <a
+            href={item.href}
+            class="nav__link"
+            data-nav-link={item.href}
+            data-mega-trigger={item.hasMega ? '' : null}
+            aria-haspopup={item.hasMega ? 'true' : null}
+            aria-expanded="false"
+          >{item.label}</a>
+        </div>
       ))}
     </nav>
 
     <div class="nav__actions">
-      <button class="nav__cart" aria-label="Abrir cesta" data-open-drawer type="button">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M6 7h12l-1.2 11.1a2 2 0 0 1-2 1.9H9.2a2 2 0 0 1-2-1.9L6 7z" />
-          <path d="M9 7V5a3 3 0 0 1 6 0v2" />
+      <button class="nav__icon-btn" aria-label="Buscar productos" data-search-open type="button">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="20" y1="20" x2="16.5" y2="16.5" />
+        </svg>
+      </button>
+      <button class="nav__cart" aria-label="Abrir cesta" data-open-drawer data-cart-button type="button">
+        <svg class="nav__cart-icon" viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9.5 11 V8.5 a4.5 4.5 0 0 1 9 0 V11" />
+          <path d="M5.5 11 L7 22 a2 2 0 0 0 2 1.7 h10 a2 2 0 0 0 2 -1.7 L22.5 11" />
+          <path d="M8 16.5 q2.5 -1.6 5 0 t5 0" stroke-width="1" opacity="0.55" />
         </svg>
         <span class="nav__cart-count" data-cart-count aria-hidden="true">0</span>
       </button>
@@ -40,10 +83,43 @@ const navItems = [
     </div>
   </div>
 
-  <div class="nav__mobile" data-nav-mobile hidden>
-    <a href="/" class="nav__mobile-link">{UI.nav.home}</a>
+  {/* === Mega menu de Colecciones (hover, solo desktop) === */}
+  <div class="mega" data-mega-panel="collections" aria-hidden="true">
+    <div class="container-wide mega__inner">
+      <div class="mega__head">
+        <p class="eyebrow mega__eyebrow">5 colecciones, hechas a mano en Vilanova i la Geltrú</p>
+        <p class="mega__lede">
+          Cada colección nace de una estación, un aroma, un momento del día. Pasa el ratón por encima
+          de cada una para leer su nota principal.
+        </p>
+      </div>
+      <ul class="mega__grid">
+        {megaItems.map((c) => (
+          <li class="mega__item">
+            <a href={`/coleccion/${c.slug}`} class="mega__link">
+              <span class="mega__name">{c.name}</span>
+              <span class="mega__note">{c.note}</span>
+              <span class="mega__meta">
+                <span class="mega__season">{c.season}</span>
+                <span class="mega__sep" aria-hidden="true">·</span>
+                <span class="mega__count">{c.count} {c.count === 1 ? 'vela' : 'velas'}</span>
+              </span>
+              <span class="mega__arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="mega__foot">
+        <a href="/colecciones" class="mega__all">Ver todas las colecciones →</a>
+      </div>
+    </div>
+  </div>
+
+  {/* === Menú mobile (lista simple) === */}
+  <div class="nav__mobile" data-nav-mobile>
+    <a href="/" class="nav__mobile-link" data-mobile-link>{UI.nav.home}</a>
     {navItems.map((item) => (
-      <a href={item.href} class="nav__mobile-link">{item.label}</a>
+      <a href={item.href} class="nav__mobile-link" data-mobile-link>{item.label}</a>
     ))}
   </div>
 </header>
@@ -69,18 +145,29 @@ const navItems = [
     padding-block: var(--space-4);
   }
 
+  /* === Brand === */
   .nav__brand {
     text-decoration: none;
     color: var(--ink);
     display: inline-flex;
-    align-items: baseline;
+    align-items: center;
+    gap: var(--space-2);
+    transition: opacity 0.3s var(--ease-soft);
+  }
+  .nav__brand:hover { opacity: 0.8; }
+  .nav__brand-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--bg-soft);
+    flex-shrink: 0;
   }
   .nav__brand-text {
     font-family: var(--font-display);
-    font-size: 1.6rem;
+    font-size: 1.55rem;
     font-weight: 500;
     letter-spacing: -0.02em;
-    font-variation-settings: "opsz" 144;
   }
   .nav__brand-text em {
     font-style: italic;
@@ -99,6 +186,9 @@ const navItems = [
     gap: var(--space-8);
   }
   @media (min-width: 900px) { .nav__links { display: flex; } }
+
+  .nav__item { position: relative; }
+  .nav__item[data-mega] { /* ancla del mega menu, padding para que el hover no se rompa */ }
 
   .nav__link {
     font-family: var(--font-body);
@@ -124,27 +214,74 @@ const navItems = [
   .nav__link:hover { color: var(--ink); }
   .nav__link:hover::after { transform: scaleX(1); }
 
+  /* === Active link (sintaxis :active de CSS para el link en estado activo) === */
+  .nav__link.is-active {
+    color: var(--terracotta);
+  }
+  .nav__link.is-active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+    background: var(--terracotta);
+    height: 1.5px;
+  }
+
   .nav__actions {
     display: flex;
     align-items: center;
     gap: var(--space-2);
   }
-  .nav__cart {
-    position: relative;
-    color: var(--ink);
+
+  /* === Cart button === */
+  .nav__icon-btn {
     width: 44px;
     height: 44px;
+    color: var(--ink);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
     transition: background 0.3s var(--ease-soft), color 0.3s var(--ease-soft);
   }
-  .nav__cart:hover { background: var(--bg-soft); color: var(--terracotta); }
+  .nav__icon-btn:hover { background: var(--bg-soft); color: var(--terracotta); }
+
+  .nav__cart {
+    position: relative;
+    color: var(--ink);
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.3s var(--ease-soft), color 0.3s var(--ease-soft), border-color 0.3s var(--ease-soft), transform 0.3s var(--ease-soft);
+  }
+  .nav__cart:hover {
+    background: var(--bg-soft);
+    color: var(--terracotta);
+    transform: translateY(-1px);
+  }
+  .nav__cart:active { transform: translateY(0); }
+  .nav__cart.has-items {
+    background: var(--bg-soft);
+    color: var(--terracotta);
+    border-color: var(--bg-deep);
+  }
+  .nav__cart.has-items:hover {
+    background: var(--terracotta);
+    color: var(--bg-soft);
+    border-color: var(--terracotta);
+  }
+  .nav__cart-icon { display: block; }
   .nav__cart-count {
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: 6px;
+    right: 6px;
     min-width: 18px;
     height: 18px;
     padding: 0 5px;
@@ -158,10 +295,12 @@ const navItems = [
     justify-content: center;
     font-family: var(--font-body);
     line-height: 1;
+    transition: transform 0.4s var(--ease);
   }
-  .nav__cart-count:empty,
+  .nav__cart.has-items .nav__cart-count { transform: scale(1); }
   .nav__cart-count[data-empty="true"] { display: none; }
 
+  /* === Toggle === */
   .nav__toggle {
     display: inline-flex;
     flex-direction: column;
@@ -180,26 +319,187 @@ const navItems = [
     height: 1.5px;
     background: var(--ink);
     transition: transform 0.4s var(--ease-soft), opacity 0.4s var(--ease-soft);
+    transform-origin: center;
   }
   .nav__toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
   .nav__toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
   .nav__toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
   @media (min-width: 900px) { .nav__toggle { display: none; } }
 
+  /* === Mega menu === */
+  .mega {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-soft);
+    border-top: 1px solid var(--bg-deep);
+    border-bottom: 1px solid var(--bg-deep);
+    box-shadow: 0 12px 32px -16px rgba(45, 33, 27, 0.18);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition:
+      opacity 0.3s var(--ease-soft),
+      transform 0.4s var(--ease-soft),
+      visibility 0s linear 0.4s;
+    pointer-events: none;
+  }
+  .mega[aria-hidden="false"] {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition:
+      opacity 0.3s var(--ease-soft),
+      transform 0.4s var(--ease-soft),
+      visibility 0s linear 0s;
+    pointer-events: auto;
+  }
+  .mega__inner {
+    padding-block: var(--space-16) var(--space-12);
+  }
+  .mega__head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-8);
+    margin-bottom: var(--space-10);
+    padding-bottom: var(--space-8);
+    border-bottom: 1px solid var(--bg-deep);
+  }
+  .mega__eyebrow { margin-bottom: var(--space-2); }
+  .mega__lede {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink-mute);
+    max-width: 32rem;
+    text-align: right;
+  }
+  .mega__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-3);
+  }
+  .mega__item { min-width: 0; }
+  .mega__link {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: var(--space-4) var(--space-3);
+    border-radius: var(--r-md);
+    text-decoration: none;
+    color: var(--ink);
+    position: relative;
+    transition: background 0.3s var(--ease-soft), color 0.3s var(--ease-soft);
+  }
+  .mega__link:hover {
+    background: var(--bg);
+    color: var(--terracotta);
+  }
+  .mega__link:hover .mega__arrow { transform: translateX(4px); opacity: 1; }
+
+  .mega__name {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.1;
+  }
+  .mega__link:hover .mega__name { color: var(--terracotta); }
+
+  .mega__note {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+  .mega__meta {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-top: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .mega__sep { opacity: 0.5; }
+  .mega__arrow {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    color: var(--terracotta);
+    font-size: 1rem;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: transform 0.3s var(--ease-soft), opacity 0.3s var(--ease-soft);
+  }
+  .mega__foot {
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--bg-deep);
+    text-align: center;
+  }
+  .mega__all {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--terracotta);
+    text-decoration: none;
+    border-bottom: 1px solid var(--terracotta);
+    padding-bottom: 2px;
+    transition: opacity 0.3s var(--ease-soft);
+  }
+  .mega__all:hover { opacity: 0.7; }
+  @media (max-width: 899px) { .mega { display: none; } }
+
+  /* === Mobile menu === */
   .nav__mobile {
     display: flex;
     flex-direction: column;
-    padding: var(--space-6);
-    gap: var(--space-3);
+    padding: 0 var(--space-6);
+    gap: 0;
     background: var(--bg-soft);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    border-top: 1px solid transparent;
+    transition:
+      max-height 0.5s var(--ease),
+      opacity 0.35s var(--ease-soft),
+      padding-block 0.5s var(--ease),
+      border-color 0.5s var(--ease-soft);
+  }
+  .nav__mobile.is-open {
+    max-height: 80vh;
+    opacity: 1;
+    padding-block: var(--space-6);
+    border-top-color: var(--bg-deep);
   }
   .nav__mobile-link {
     font-family: var(--font-display);
     font-size: 1.5rem;
     color: var(--ink);
-    padding: 0.5rem 0;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--bg-deep);
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.4s var(--ease-soft), transform 0.4s var(--ease-soft), color 0.3s var(--ease-soft);
   }
-  .nav__mobile[hidden] { display: none; }
+  .nav__mobile.is-open .nav__mobile-link {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .nav__mobile.is-open .nav__mobile-link:nth-child(1) { transition-delay: 120ms; }
+  .nav__mobile.is-open .nav__mobile-link:nth-child(2) { transition-delay: 180ms; }
+  .nav__mobile.is-open .nav__mobile-link:nth-child(3) { transition-delay: 240ms; }
+  .nav__mobile.is-open .nav__mobile-link:nth-child(4) { transition-delay: 300ms; }
+  .nav__mobile.is-open .nav__mobile-link:nth-child(5) { transition-delay: 360ms; }
+  .nav__mobile-link:last-child { border-bottom: 0; }
+  .nav__mobile-link:hover { color: var(--terracotta); }
+  .nav__mobile-link.is-active { color: var(--terracotta); }
   @media (min-width: 900px) { .nav__mobile { display: none !important; } }
 </style>
 
@@ -213,35 +513,124 @@ const navItems = [
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  // === Active link (matches current URL) ===
+  const setActive = () => {
+    const path = window.location.pathname;
+    const rules: Array<[string, (p: string) => boolean]> = [
+      ['/colecciones', (p) => p === '/colecciones' || p.startsWith('/coleccion/')],
+      ['/catalogo',   (p) => p === '/catalogo'     || p.startsWith('/producto/')],
+      ['/taller',     (p) => p === '/taller' || p.startsWith('/taller/')],
+      ['/contacto',   (p) => p === '/contacto' || p.startsWith('/contacto/')],
+    ];
+    document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]').forEach((a) => {
+      const href = a.getAttribute('data-nav-link') || '';
+      const match = rules.find(([h]) => h === href);
+      a.classList.toggle('is-active', !!(match && match[1](path)));
+    });
+    document.querySelectorAll<HTMLAnchorElement>('[data-mobile-link]').forEach((a) => {
+      const href = a.getAttribute('href') || '';
+      const match = rules.find(([h]) => h === href);
+      a.classList.toggle('is-active', !!(match && match[1](path)));
+    });
+  };
+  setActive();
+  document.addEventListener('astro:after-swap', setActive);
+
+  // === Toggle del menu mobile (animado) ===
   const toggle = document.querySelector('[data-nav-toggle]');
   const mobile = document.querySelector('[data-nav-mobile]');
+  const setMobileOpen = (open: boolean) => {
+    if (!toggle || !mobile) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    mobile.classList.toggle('is-open', open);
+  };
   toggle?.addEventListener('click', () => {
     const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', String(!isOpen));
-    if (mobile) {
-      if (isOpen) mobile.setAttribute('hidden', '');
-      else mobile.removeAttribute('hidden');
+    setMobileOpen(!isOpen);
+  });
+  mobile?.querySelectorAll('[data-mobile-link]').forEach((a) => {
+    a.addEventListener('click', () => setMobileOpen(false));
+  });
+
+  // === Mega menu: hover en el link, panel debajo, timeout de 200ms para el puente ===
+  let megaCloseTimer: number | undefined;
+  const openMega = (key: string) => {
+    window.clearTimeout(megaCloseTimer);
+    const item = document.querySelector(`[data-mega="${key}"]`);
+    const panel = document.querySelector(`[data-mega-panel="${key}"]`);
+    const trigger = item?.querySelector<HTMLElement>('[data-mega-trigger]');
+    if (!panel || !item) return;
+    // Cerrar cualquier otro mega abierto (defensivo: solo hay uno en este sitio)
+    document.querySelectorAll('.mega[aria-hidden="false"]').forEach((m) => {
+      if (m !== panel) m.setAttribute('aria-hidden', 'true');
+    });
+    panel.setAttribute('aria-hidden', 'false');
+    item.classList.add('is-mega-open');
+    trigger?.setAttribute('aria-expanded', 'true');
+  };
+  const closeMega = (key: string) => {
+    const item = document.querySelector(`[data-mega="${key}"]`);
+    const panel = document.querySelector(`[data-mega-panel="${key}"]`);
+    const trigger = item?.querySelector<HTMLElement>('[data-mega-trigger]');
+    if (!panel) return;
+    panel.setAttribute('aria-hidden', 'true');
+    item?.classList.remove('is-mega-open');
+    trigger?.setAttribute('aria-expanded', 'false');
+  };
+  const scheduleCloseMega = (key: string) => {
+    window.clearTimeout(megaCloseTimer);
+    megaCloseTimer = window.setTimeout(() => closeMega(key), 200);
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-mega]').forEach((item) => {
+    const key = item.getAttribute('data-mega');
+    if (!key) return;
+    item.addEventListener('mouseenter', () => openMega(key));
+    item.addEventListener('mouseleave', () => scheduleCloseMega(key));
+    // Accesibilidad: abrir con focus, cerrar con blur (con delay)
+    const trigger = item.querySelector<HTMLElement>('[data-mega-trigger]');
+    trigger?.addEventListener('focus', () => openMega(key));
+    trigger?.addEventListener('blur', () => scheduleCloseMega(key));
+  });
+  document.querySelectorAll<HTMLElement>('[data-mega-panel]').forEach((panel) => {
+    const key = panel.getAttribute('data-mega-panel');
+    if (!key) return;
+    panel.addEventListener('mouseenter', () => {
+      window.clearTimeout(megaCloseTimer);
+      openMega(key);
+    });
+    panel.addEventListener('mouseleave', () => scheduleCloseMega(key));
+  });
+  // Cerrar con ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.mega[aria-hidden="false"]').forEach((m) => m.setAttribute('aria-hidden', 'true'));
+      document.querySelectorAll('.nav__item.is-mega-open').forEach((i) => i.classList.remove('is-mega-open'));
     }
   });
 
+  // === Cart count + estado has-items en el boton ===
+  const cartButton = document.querySelector('[data-cart-button]');
   const tryUpdateCart = () => {
     const el = document.querySelector('[data-cart-count]');
     if (!el) return;
+    let n = 0;
     try {
       const raw = localStorage.getItem('candele-cart');
       const cart = raw ? JSON.parse(raw) : null;
-      const n = Array.isArray(cart?.items)
-        ? cart.items.reduce((s: number, i: { qty: number }) => s + (i.qty || 0), 0)
+      n = Array.isArray(cart?.items)
+        ? cart.items.reduce((s, i) => s + (i.qty || 0), 0)
         : 0;
-      el.textContent = n > 0 ? String(n) : '';
-      el.dataset.empty = n > 0 ? 'false' : 'true';
-    } catch { el.dataset.empty = 'true'; el.textContent = ''; }
+    } catch {}
+    el.textContent = n > 0 ? String(n) : '';
+    el.dataset.empty = n > 0 ? 'false' : 'true';
+    cartButton?.classList.toggle('has-items', n > 0);
   };
   tryUpdateCart();
   window.addEventListener('storage', tryUpdateCart);
   window.addEventListener('cart:updated', tryUpdateCart);
 
-  // Abrir drawer al hacer click en el icono de cesta
+  // === Abrir drawer al hacer click en el icono de cesta ===
   document.querySelector('[data-open-drawer]')?.addEventListener('click', () => {
     window.dispatchEvent(new CustomEvent('cart:open'));
   });

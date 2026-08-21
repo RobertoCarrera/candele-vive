@@ -100,7 +100,7 @@ export const UI = {
   },
   home: {
     heroEyebrow: 'vela · cera · calma',
-    heroTitle: 'Velas hechas en casa, para tu casa',
+    heroTitle: 'Una vela para volver a ti',
     heroBody:
       'Vertemos cada vela a mano, en pequeños lotes, con cera de soja y fragancias sin prisa. La encoges cuando quieres, la apagas cuando puedes.',
     perksTitle: 'tres cosas que siempre hacemos igual',

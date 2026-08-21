@@ -17,8 +17,13 @@ import { UI } from '../../data/ui';
       </p>
 
       <h1 id="hero-title" class="hero__title">
-        Velas hechas en casa, <em>para tu casa</em>
+        Una vela <em>para volver a ti</em>
       </h1>
+
+      <p class="hero__motto">
+        <span class="hero__motto-mark" aria-hidden="true">“</span>
+        Una vela nunca perderá nada por ayudar a encender otra.
+      </p>
 
       <p class="hero__body">{UI.home.heroBody}</p>
 
@@ -114,6 +119,27 @@ import { UI } from '../../data/ui';
     color: var(--ink-soft);
     max-width: 30rem;
     margin-bottom: var(--space-8);
+  }
+
+  .hero__motto {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1rem, 1.2vw, 1.1rem);
+    line-height: 1.5;
+    color: var(--ink);
+    padding-left: var(--space-4);
+    border-left: 2px solid var(--terracotta);
+    margin-bottom: var(--space-8);
+    max-width: 32rem;
+    position: relative;
+  }
+  .hero__motto-mark {
+    color: var(--terracotta);
+    font-size: 1.4em;
+    line-height: 0;
+    margin-right: 0.15em;
+    position: relative;
+    top: 0.15em;
   }
 
   .hero__ctas {

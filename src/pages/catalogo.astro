@@ -4,6 +4,7 @@ import ProductCard from '../components/shop/ProductCard.astro';
 import Wave from '../components/decorative/Wave.astro';
 import { getCollection } from 'astro:content';
 import { SITE } from '../data/site';
+import { MOODS, MOOD_LABEL, moodsFor } from '../lib/moods';
 
 const allProducts = (await getCollection('products'))
   .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
@@ -13,7 +14,7 @@ const collections = (await getCollection('collections'))
 const SHIFTS = ['none', 'down', 'up', 'none', 'down', 'up', 'none', 'down', 'up', 'none', 'down', 'up', 'none', 'down', 'up', 'none', 'down', 'up', 'none'];
 
 const title = 'Catálogo · velas hechas a mano';
-const description = 'Todas las velas Candele Vive en un solo lugar. Filtra por colección, encuentra tu próxima favorita.';
+const description = 'Todas las velas Candele Vive en un solo lugar. Filtra por colección o por intención, encuentra tu próxima favorita.';
 ---
 
 <BaseLayout title={title} description={description}>
@@ -23,31 +24,53 @@ const description = 'Todas las velas Candele Vive en un solo lugar. Filtra por c
       <h1 class="cat-hero__title">El <em>catálogo</em></h1>
       <Wave class="cat-hero__wave" color="var(--terracotta)" />
       <p class="cat-hero__lede">
-        Diecinueve velas, cinco colecciones. Hojea el libro, filtra por estación,
-        o mira el catálogo entero.
+        Diecinueve velas, cinco colecciones. Hojea el libro, filtra por estación
+        o por intención, y mira el catálogo entero.
       </p>
     </div>
   </header>
 
-  <nav class="cat-filters" aria-label="Filtros por colección" data-cat-filters>
-    <div class="container cat-filters__inner">
-      <span class="cat-filters__label">Filtrar por</span>
-      <div class="cat-filters__pills">
-        <button class="cat-filter is-active" data-filter="all">Todas</button>
-        {collections.map((c) => (
-          <button class="cat-filter" data-filter={c.data.slug}>
-            {c.data.name} <em>· {c.data.season}</em>
-          </button>
-        ))}
+  <div class="cat-filters" data-cat-filters>
+    {/* Filtros por colección */}
+    <div class="cat-filters__row" data-filter-group="collection">
+      <div class="container cat-filters__inner">
+        <span class="cat-filters__label">Colección</span>
+        <div class="cat-filters__pills" role="tablist">
+          <button class="cat-filter is-active" data-filter-collection="all">Todas</button>
+          {collections.map((c) => (
+            <button class="cat-filter" data-filter-collection={c.data.slug}>
+              {c.data.name} <em>· {c.data.season}</em>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
-  </nav>
+    {/* Filtros por intención / emoción */}
+    <div class="cat-filters__row" data-filter-group="mood">
+      <div class="container cat-filters__inner">
+        <span class="cat-filters__label">Intención</span>
+        <div class="cat-filters__pills" role="tablist">
+          <button class="cat-filter is-active" data-filter-mood="all">Cualquiera</button>
+          {MOODS.map((m) => (
+            <button class="cat-filter" data-filter-mood={m}>{MOOD_LABEL[m]}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="cat-empty" data-cat-empty hidden>
+    No hay velas que coincidan con los filtros. <button type="button" data-cat-reset>Quitar filtros</button>
+  </p>
 
   <section class="cat-grid-section">
     <div class="container-wide">
       <ul class="cat-grid" data-cat-grid>
         {allProducts.map((p, i) => (
-          <li data-collection={p.data.collection}>
+          <li
+            data-collection={p.data.collection}
+            data-moods={moodsFor(p.data.id).join(',')}
+          >
             <ProductCard
               id={p.data.id}
               name={p.data.name}
@@ -102,6 +125,9 @@ const description = 'Todas las velas Candele Vive en un solo lugar. Filtra por c
     border-block: 1px solid var(--bg-deep);
     margin-bottom: var(--space-12);
   }
+  .cat-filters__row + .cat-filters__row {
+    border-top: 1px solid var(--bg-deep);
+  }
   .cat-filters__inner {
     display: flex;
     flex-direction: column;
@@ -123,6 +149,8 @@ const description = 'Todas las velas Candele Vive en un solo lugar. Filtra por c
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--ink-mute);
+    min-width: 80px;
+    text-align: right;
   }
   .cat-filters__pills {
     display: flex;
@@ -152,6 +180,29 @@ const description = 'Todas las velas Candele Vive en un solo lugar. Filtra por c
   }
   .cat-filter.is-active em { color: var(--bg-soft); opacity: 0.6; }
 
+  .cat-empty {
+    text-align: center;
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink-mute);
+    font-size: 1.1rem;
+    padding: var(--space-12) var(--space-6);
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+  .cat-empty button {
+    background: transparent;
+    border: 0;
+    color: var(--terracotta);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.1rem;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 0.4rem;
+  }
+
   .cat-grid-section { padding-bottom: var(--space-24); }
   .cat-grid {
     display: grid;
@@ -164,18 +215,47 @@ const description = 'Todas las velas Candele Vive en un solo lugar. Filtra por c
 </style>
 
 <script>
-  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  // Filtros: combinación de colección + intención (AND). "all" = no filtra.
   const items = document.querySelectorAll<HTMLElement>('[data-cat-grid] > li');
+  const collButtons = document.querySelectorAll<HTMLButtonElement>('[data-filter-collection]');
+  const moodButtons = document.querySelectorAll<HTMLButtonElement>('[data-filter-mood]');
+  const emptyState = document.querySelector<HTMLElement>('[data-cat-empty]');
+  const resetBtn   = document.querySelector<HTMLButtonElement>('[data-cat-reset]');
 
-  buttons.forEach((b) => {
-    b.addEventListener('click', () => {
-      buttons.forEach((x) => x.classList.remove('is-active'));
-      b.classList.add('is-active');
-      const f = b.dataset.filter;
-      items.forEach((li) => {
-        const matches = f === 'all' || li.dataset.collection === f;
-        li.classList.toggle('is-hidden', !matches);
+  const state = { collection: 'all', mood: 'all' };
+
+  const apply = () => {
+    let visible = 0;
+    items.forEach((li) => {
+      const coll = li.dataset.collection || '';
+      const moods = (li.dataset.moods || '').split(',').filter(Boolean);
+      const matchColl = state.collection === 'all' || coll === state.collection;
+      const matchMood = state.mood === 'all' || moods.includes(state.mood);
+      const show = matchColl && matchMood;
+      li.classList.toggle('is-hidden', !show);
+      if (show) visible++;
+    });
+    if (emptyState) emptyState.hidden = visible > 0;
+  };
+
+  const wire = (btns: NodeListOf<HTMLButtonElement>, key: 'collection' | 'mood', attr: string) => {
+    btns.forEach((b) => {
+      b.addEventListener('click', () => {
+        btns.forEach((x) => x.classList.remove('is-active'));
+        b.classList.add('is-active');
+        state[key] = b.getAttribute(attr) || 'all';
+        apply();
       });
     });
+  };
+  wire(collButtons, 'collection', 'data-filter-collection');
+  wire(moodButtons, 'mood',       'data-filter-mood');
+
+  resetBtn?.addEventListener('click', () => {
+    state.collection = 'all';
+    state.mood = 'all';
+    collButtons.forEach((b) => b.classList.toggle('is-active', (b.getAttribute('data-filter-collection') || 'all') === 'all'));
+    moodButtons.forEach((b) => b.classList.toggle('is-active', (b.getAttribute('data-filter-mood') || 'all') === 'all'));
+    apply();
   });
 </script>

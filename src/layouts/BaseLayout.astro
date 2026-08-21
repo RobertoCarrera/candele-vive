@@ -9,6 +9,7 @@ import Footer from '../components/layout/Footer.astro';
 import FloatingWhatsApp from '../components/layout/FloatingWhatsApp.astro';
 import CartDrawer from '../components/cart/CartDrawer.astro';
 import Toaster from '../components/cart/Toaster.astro';
+import SearchModal from '../components/shop/SearchModal.astro';
 import { getCollection } from 'astro:content';
 import { SITE } from '../data/site';
 import { UI } from '../data/ui';
@@ -133,7 +134,7 @@ const drawerCopy = {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500;600&display=swap"
     />
 
     {allJsonLd.map((schema) => (
@@ -156,6 +157,7 @@ const drawerCopy = {
       copy={drawerCopy}
     />
     <Toaster />
+    <SearchModal />
 
     <style>
       .skip-link {

@@ -1,0 +1,118 @@
+---
+/**
+ * Política de cookies — Cumplimiento de la LSSI y RGPD.
+ *
+ * El sitio web de Candele Vive utiliza únicamente cookies técnicas
+ * necesarias para su funcionamiento (por ejemplo, recordar el contenido
+ * de la cesta de la compra). No utiliza cookies de analítica ni de
+ * marketing en este momento.
+ */
+import LegalPage from '../components/legal/LegalPage.astro';
+import { SITE } from '../data/site';
+---
+
+<LegalPage
+  title="Política de cookies"
+  description="Qué cookies usa el sitio web de Candele Vive y cómo puedes gestionarlas."
+  lastUpdated="agosto 2026"
+  effectiveDate="20 de agosto de 2026"
+>
+  <h2>1. ¿Qué son las cookies?</h2>
+  <p>
+    Las cookies son pequeños archivos de texto que un sitio web almacena en
+    tu navegador cuando lo visitas. Sirven para que el sitio pueda
+    recordar tus acciones y preferencias durante un tiempo (por ejemplo:
+    mantener la sesión abierta, recordar los productos de tu cesta o
+    recordar tu idioma).
+  </p>
+
+  <h2>2. ¿Qué cookies usa este sitio?</h2>
+  <p>Este sitio utiliza exclusivamente <strong>cookies técnicas</strong>, que son las estrictamente necesarias para su funcionamiento. En concreto:</p>
+
+  <table>
+    <thead>
+      <tr><th>Cookie</th><th>Tipo</th><th>Finalidad</th><th>Duración</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>candele-cart</code></td>
+        <td>Técnica (propia)</td>
+        <td>Guarda los productos que has añadido a la cesta de la compra.</td>
+        <td>Persistente (hasta 1 año)</td>
+      </tr>
+      <tr>
+        <td><code>candele-checkout</code></td>
+        <td>Técnica (propia)</td>
+        <td>Guarda los datos del proceso de pago entre pasos (envío, método).</td>
+        <td>Sesión</td>
+      </tr>
+      <tr>
+        <td><code>candele-last-order</code></td>
+        <td>Técnica (propia)</td>
+        <td>Permite "reenviar pedido por WhatsApp" desde la página de confirmación.</td>
+        <td>7 días</td>
+      </tr>
+      <tr>
+        <td><code>candele-whatsapp-tip-seen</code></td>
+        <td>Técnica (propia)</td>
+        <td>Recuerda si ya has visto el tooltip del botón de WhatsApp para no mostrarlo de nuevo.</td>
+        <td>Persistente</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="legal-callout">
+    <strong>Importante:</strong> en este momento <strong>no usamos cookies
+    de analítica ni de marketing</strong>. Si en el futuro incorporamos
+    alguna (por ejemplo, Google Analytics o Meta Pixel), actualizaremos
+    esta política y solicitaremos tu consentimiento antes de hacerlo.
+  </p>
+
+  <h2>3. ¿Por qué solo cookies técnicas?</h2>
+  <p>
+    Las cookies técnicas son <strong>estrictamente necesarias</strong> para
+    que el sitio funcione (por ejemplo, sin la cookie <code>candele-cart</code>
+    no podríamos mantener tu cesta entre páginas). Según el RGPD y la
+    LSSI, este tipo de cookies <strong>no requieren consentimiento
+    previo</strong> del usuario, aunque sigue siendo obligatorio informar
+    de su uso en esta política.
+  </p>
+
+  <h2>4. Cookies de terceros</h2>
+  <p>
+    En este momento no usamos cookies de terceros (Google Analytics,
+    Meta Pixel, Hotjar, etc.). Si en el futuro decides añadirlas, lo
+    avisaremos con un banner de consentimiento y actualizaremos esta
+    política antes de hacerlo.
+  </p>
+
+  <h2>5. ¿Cómo gestionar las cookies?</h2>
+  <p>
+    Puedes configurar tu navegador para que rechace todas las cookies o
+    avise antes de instalarlas. Ten en cuenta que, si desactivas las
+    cookies técnicas, es posible que el sitio deje de funcionar
+    correctamente (por ejemplo, tu cesta podría vaciarse entre
+    páginas).
+  </p>
+  <p>Instrucciones por navegador:</p>
+  <ul>
+    <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Google Chrome</a></li>
+    <li><a href="https://support.mozilla.org/es/kb/Borrar%20cookies" target="_blank" rel="noopener">Mozilla Firefox</a></li>
+    <li><a href="https://support.apple.com/es-es/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Safari</a></li>
+    <li><a href="https://support.microsoft.com/es-es/microsoft-edge/delete-cookies-microsoft-edge" target="_blank" rel="noopener">Microsoft Edge</a></li>
+  </ul>
+
+  <h2>6. Cambios en esta política</h2>
+  <p>
+    Si en el futuro introducimos cookies que requieran consentimiento
+    (analítica, marketing, etc.), actualizaremos esta política y mostraremos
+    un banner para que puedas aceptarlas o rechazarlas antes de que se
+    instalen.
+  </p>
+
+  <h2>7. Más información</h2>
+  <p>
+    Si tienes dudas sobre el uso de cookies en este sitio, escríbenos a
+    <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+  </p>
+</LegalPage>

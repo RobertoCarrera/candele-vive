@@ -1,0 +1,178 @@
+---
+/**
+ * Política de envíos y devoluciones — información precontractual obligatoria
+ * conforme al Real Decreto Legislativo 1/2007 (Texto Refundido de la Ley
+ * General para la Defensa de los Consumidores y Usuarios) y la Ley 3/2004
+ * de lucha contra la morosidad en las operaciones comerciales.
+ *
+ * BASE LEGAL: las tarifas, plazos y transportista deben ser confirmados por
+ * el titular antes de publicar.
+ */
+import LegalPage from '../components/legal/LegalPage.astro';
+import { SITE } from '../data/site';
+---
+
+<LegalPage
+  title="Envíos y devoluciones"
+  description="Cómo gestionamos los envíos, plazos, costes y devoluciones de tus pedidos en Candele Vive."
+  lastUpdated="agosto 2026"
+  effectiveDate="20 de agosto de 2026"
+>
+  <h2>1. Zonas de envío</h2>
+  <p>Actualmente enviamos a:</p>
+  <ul>
+    <li><strong>España peninsular</strong> (todas las comunidades autónomas excepto Canarias, Ceuta y Melilla).</li>
+    <li><strong>Baleares</strong>.</li>
+  </ul>
+  <p class="legal-callout">
+    Si vives en <strong>Canarias, Ceuta o Melilla</strong>, o quieres
+    recibir un pedido fuera de España, escríbenos por
+    <a href={`https://wa.me/${SITE.whatsappRaw}`}>WhatsApp</a> y te
+    presupuestamos el envío manualmente.
+  </p>
+
+  <h2>2. Plazos de entrega</h2>
+  <ul>
+    <li><strong>Preparación del pedido:</strong> 1-2 días hábiles desde la confirmación del pago.</li>
+    <li><strong>Envío a Península:</strong> 24-48 horas hábiles tras la entrega al transportista.</li>
+    <li><strong>Envío a Baleares:</strong> 3-5 días hábiles.</li>
+  </ul>
+  <p>
+    Los plazos son orientativos. En fechas de alta demanda (Navidad,
+    Black Friday) o por causas de fuerza mayor, los plazos pueden
+    extenderse. Si esto ocurre, te avisaremos por email o WhatsApp.
+  </p>
+
+  <h2>3. Costes de envío</h2>
+
+  <table>
+    <thead>
+      <tr><th>Zona</th><th>Importe del pedido</th><th>Coste de envío</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td rowspan="2">España peninsular</td>
+        <td>Igual o superior a {SITE.freeShippingThreshold.toFixed(2).replace('.', ',')} €</td>
+        <td><strong>Gratis</strong></td>
+      </tr>
+      <tr>
+        <td>Inferior a {SITE.freeShippingThreshold.toFixed(2).replace('.', ',')} €</td>
+        <td>{SITE.shippingCost.toFixed(2).replace('.', ',')} €</td>
+      </tr>
+      <tr>
+        <td>Baleares</td>
+        <td>Cualquier importe</td>
+        <td><span style="background:var(--bg-warm);padding:0 0.4em;border-radius:4px;">__TARIFA_BALEARES__</span> (pendiente de confirmar)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Los precios de los productos y los gastos de envío se muestran
+    desglosados en el proceso de compra antes de su confirmación, junto
+    con el IVA aplicable.
+  </p>
+
+  <h2>4. Cómo tramitamos tu pedido</h2>
+  <ol>
+    <li>Haces tu pedido desde la web y lo confirmas por WhatsApp con nosotros.</li>
+    <li>Te confirmamos por escrito los productos, la dirección de envío, el coste total y la fecha estimada de entrega.</li>
+    <li>Preparamos tu pedido a mano en el taller (1-2 días hábiles) y lo entregamos al transportista.</li>
+    <li>Te enviamos un número de seguimiento por WhatsApp o email para que sepas dónde está tu paquete.</li>
+  </ol>
+
+  <h2>5. Seguimiento del envío</h2>
+  <p>
+    Una vez entregado el paquete al transportista, te facilitaremos un
+    código o enlace de seguimiento. Si no recibes esta información en
+    las 48 horas siguientes a la confirmación de tu pedido, escríbenos
+    a <a href={`mailto:${SITE.email}`}>{SITE.email}</a> o por
+    <a href={`https://wa.me/${SITE.whatsappRaw}`}>WhatsApp</a>.
+  </p>
+
+  <h2>6. Si no estás en casa cuando llega el paquete</h2>
+  <p>
+    El transportista intentará la entrega en la dirección indicada. Si
+    no hay nadie, normalmente deja un aviso y se puede recoger en un
+    punto cercano o solicitar una segunda entrega. Los gastos de
+    reenvío derivados de direcciones incorrectas o ausencias reiteradas
+    correrán a cargo del cliente.
+  </p>
+
+  <h2>7. Dirección de envío incorrecta</h2>
+  <p>
+    Es responsabilidad del cliente indicar la dirección de envío de forma
+    completa y correcta. Si el pedido ya ha sido enviado y la dirección
+    es incorrecta, los gastos de reenvío corren a cargo del cliente. Si
+    el pedido aún no ha salido del taller, podemos corregir la dirección
+    sin coste adicional.
+  </p>
+
+  <h2>8. Pedidos dañados o perdidos</h2>
+  <p>
+    Si recibes un pedido dañado, escríbenos en las
+    <strong>primeras 48 horas</strong> tras la recepción con una foto
+    del paquete y del producto afectado. Te enviaremos uno nuevo sin
+    coste o te devolveremos el importe íntegro, según prefieras.
+  </p>
+  <p>
+    Si el transportista pierde el paquete y el seguimiento no muestra
+    movimiento durante más de 5 días laborables, gestionamos la
+    reclamación con el transportista y te enviamos un nuevo pedido o
+    te devolvemos el dinero.
+  </p>
+
+  <h2>9. Derecho de desistimiento (devoluciones)</h2>
+  <p>
+    Conforme al artículo 71 del Real Decreto Legislativo 1/2007, tienes
+    derecho a desistir de tu compra en un plazo de
+    <strong>14 días naturales</strong> desde la recepción del producto,
+    sin necesidad de justificar el motivo.
+  </p>
+  <p><strong>¿Cómo ejercerlo?</strong></p>
+  <ol>
+    <li>Notifícanos tu decisión por email a <a href={`mailto:${SITE.email}`}>{SITE.email}</a> o por <a href={`https://wa.me/${SITE.whatsappRaw}`}>WhatsApp</a> dentro del plazo de 14 días.</li>
+    <li>Devuélvenos el producto en su embalaje original, sin usar y en perfecto estado, en un plazo máximo de 14 días desde la notificación.</li>
+    <li>Una vez recibido el producto y verificado su estado, te reembolsaremos el importe íntegro (producto + envío original) en el mismo método de pago utilizado, en un plazo máximo de 14 días.</li>
+  </ol>
+
+  <h2>10. Excepciones al derecho de desistimiento</h2>
+  <p>
+    Conforme al artículo 103 de la Ley General de Consumidores, el
+    derecho de desistimiento <strong>no aplica</strong> a:
+  </p>
+  <ul>
+    <li>Productos personalizados o hechos a medida (por ejemplo, el kit <em>Rituale</em> si lo has personalizado).</li>
+    <li>Productos abiertos o usados, por motivos de higiene (por ejemplo, la vela Carezza de masaje una vez abierta, los wax melts una vez sacados del envase sellado).</li>
+    <li>Productos que puedan deteriorarse o caducar con rapidez.</li>
+  </ul>
+
+  <h2>11. Producto defectuoso o error en el pedido</h2>
+  <p>
+    Si has recibido un producto defectuoso o que no corresponde con tu
+    pedido, tienes derecho a:
+  </p>
+  <ul>
+    <li><strong>Reparación o sustitución</strong> del producto (preferimos sustituir).</li>
+    <li><strong>Reducción del precio</strong> o <strong>resolución del contrato</strong> (devolución íntegra) si la reparación/sustitución no es posible.</li>
+  </ul>
+  <p>En estos casos, todos los gastos de envío corren por nuestra cuenta. Escríbenos a <a href={`mailto:${SITE.email}`}>{SITE.email}</a> y gestionamos la incidencia en menos de 24h.</p>
+
+  <h2>12. Pedidos rechazados o no recogidos</h2>
+  <p>
+    Si un pedido es devuelto a nuestro taller por no haber sido recogido
+    o por dirección incorrecta, te avisaremos. Tras 14 días sin
+    respuesta, el pedido se considerará abandonado y se reembolsará el
+    importe del producto (descontando los gastos de envío y devolución
+    ya generados).
+  </p>
+
+  <h2>13. Contacto</h2>
+  <p>
+    Para cualquier duda sobre envíos, devoluciones o incidencias:
+  </p>
+  <ul>
+    <li>Email: <a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+    <li>WhatsApp: <a href={`https://wa.me/${SITE.whatsappRaw}`}>+{SITE.whatsappRaw.slice(0, 2)} {SITE.whatsappRaw.slice(2, 5)} {SITE.whatsappRaw.slice(5, 8)} {SITE.whatsappRaw.slice(8)}</a></li>
+  </ul>
+</LegalPage>

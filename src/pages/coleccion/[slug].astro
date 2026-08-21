@@ -100,42 +100,49 @@ const jsonLd: Record<string, unknown>[] = [
     <span>{collection.data.name}</span>
   </nav>
 
-  <header class="col-hero">
-    <div class="container col-hero__inner">
-      <p class="eyebrow col-hero__eyebrow">
-        Colección de {collection.data.season.toLowerCase()} · desde {content.foundedYear}
-      </p>
-      <h1 class="col-hero__title">
-        {collection.data.name}
-      </h1>
-      {collection.data.heroTagline && (
-        <p class="col-hero__tag">{collection.data.heroTagline}</p>
-      )}
-      <Wave class="col-hero__wave" color="var(--terracotta)" />
-      <p class="col-hero__sub">
-        {content.candleCount} {content.candleCount === 1 ? 'vela' : 'velas'} ·
-        {content.burnTime} de duración · {content.weight}
-      </p>
-    </div>
-    <div class="container-wide col-hero__art">
-      <img
-        src={collectionHero(slug)}
-        alt={`Imagen de la Colección ${collection.data.name} (${collection.data.season})`}
-        class="col-hero__img"
-        loading="eager"
-        decoding="async"
-      />
-    </div>
-  </header>
+  <div class="container-wide col-stack">
+    <div class="col-stack__text">
+      <header class="col-hero">
+        <p class="eyebrow col-hero__eyebrow">
+          Colección de {collection.data.season.toLowerCase()} · desde {content.foundedYear}
+        </p>
+        <h1 class="col-hero__title">
+          {collection.data.name}
+        </h1>
+        {collection.data.heroTagline && (
+          <p class="col-hero__tag">{collection.data.heroTagline}</p>
+        )}
+        <div class="col-hero__rule" aria-hidden="true"></div>
+        <p class="col-hero__sub">
+          {content.candleCount} {content.candleCount === 1 ? 'vela' : 'velas'} ·
+          {content.burnTime} de duración · {content.weight}
+        </p>
+      </header>
 
-  <section class="col-intro">
-    <div class="container col-intro__inner">
-      <h2 class="col-intro__title">{content.introTitle}</h2>
-      <div class="col-intro__body">
-        {content.introBody.map((p) => <p>{p}</p>)}
+      <section class="col-intro">
+        <div class="col-intro__inner">
+          <h2 class="col-intro__title">{content.introTitle}</h2>
+          <div class="col-intro__body">
+            {content.introBody.map((p) => <p>{p}</p>)}
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-stack__media">
+      <div class="polaroid">
+        <img
+          src={collectionHero(slug)}
+          alt={`Imagen de la Colección ${collection.data.name} (${collection.data.season})`}
+          class="polaroid__img"
+          loading="eager"
+          decoding="async"
+          width="1200"
+          height="800"
+        />
       </div>
     </div>
-  </section>
+  </div>
 
   <section class="col-facts">
     <div class="container-wide">
@@ -314,31 +321,32 @@ const jsonLd: Record<string, unknown>[] = [
   .col-crumbs a:hover { color: var(--terracotta); }
   .col-crumbs span:last-child { color: var(--ink); font-style: italic; font-family: var(--font-display); font-size: 0.95rem; }
 
-  /* === HERO === */
-  .col-hero {
-    padding-block: var(--space-8) var(--space-12);
-    text-align: center;
-    background: var(--bg);
-  }
-  .col-hero__inner { max-width: 48rem; margin-inline: auto; }
+  /* === HERO (texto dentro del col-stack__text; polaroid en col-stack__media) === */
+  .col-hero { background: var(--bg); }
+  .col-hero__text { text-align: left; }
   .col-hero__eyebrow { color: var(--sage); }
   .col-hero__title {
     font-family: var(--font-display);
-    font-size: clamp(3.2rem, 8vw, 6rem);
-    line-height: 0.95;
+    font-size: clamp(3rem, 7.5vw, 5.4rem);
+    line-height: 0.96;
     margin-top: var(--space-3);
     color: var(--ink);
+    letter-spacing: -0.01em;
   }
   .col-hero__tag {
     font-family: var(--font-display);
     font-style: italic;
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-size: clamp(1.1rem, 1.7vw, 1.35rem);
     color: var(--ink-mute);
     margin-top: var(--space-4);
-    max-width: 32rem;
-    margin-inline: auto;
+    max-width: 26rem;
   }
-  .col-hero__wave { width: 120px; height: 12px; margin: var(--space-6) auto 0; }
+  .col-hero__rule {
+    width: 56px;
+    height: 1px;
+    background: var(--terracotta);
+    margin-top: var(--space-5);
+  }
   .col-hero__sub {
     font-family: var(--font-body);
     font-size: 0.85rem;
@@ -347,9 +355,60 @@ const jsonLd: Record<string, unknown>[] = [
     letter-spacing: 0.04em;
   }
 
-  /* === INTRO === */
-  .col-intro { background: var(--bg); padding-block: var(--space-8) var(--space-16); }
-  .col-intro__inner { max-width: 44rem; margin-inline: auto; }
+  /* === STACK: 2 columnas (hero text + intro text) a la izquierda,
+        polaroid sticky a la derecha. Roberto pidió que la imagen y
+        el texto introductorio quedasen alineados — esto lo cumple
+        porque la polaroid sigue visible mientras lees la intro. === */
+  .col-stack {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    align-items: start;
+  }
+  @media (min-width: 880px) {
+    .col-stack {
+      grid-template-columns: 1fr 340px;
+      gap: var(--space-10);
+    }
+  }
+
+  /* === Polaroid sticky (mismo bloque 340px que antes) === */
+  .col-stack__media {
+    align-self: start;
+    position: sticky;
+    top: 110px;
+  }
+  @media (max-width: 879px) {
+    .col-stack__media {
+      position: static;
+      max-width: 340px;
+      margin-inline: auto;
+    }
+  }
+  .polaroid {
+    background: #fdfaf3;
+    padding: 10px 10px 36px;
+    border-radius: 4px;
+    box-shadow:
+      0 14px 32px -14px rgba(45, 33, 27, 0.22),
+      0 3px 8px -2px rgba(45, 33, 27, 0.08);
+    transform: rotate(-1.5deg);
+    transition: transform 0.5s var(--ease-soft);
+  }
+  .polaroid:hover {
+    transform: rotate(-0.4deg) translateY(-2px);
+  }
+  .polaroid__img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* === INTRO (ahora dentro del col-stack__text, no centrada) === */
+  .col-hero { padding-block: var(--space-4) var(--space-6); }
+  .col-intro { background: var(--bg); padding-block: var(--space-4) var(--space-16); }
+  .col-intro__inner { max-width: 38rem; }
   .col-intro__title {
     font-family: var(--font-display);
     font-size: clamp(1.6rem, 3vw, 2.2rem);

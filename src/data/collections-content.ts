@@ -112,8 +112,8 @@ export const COLLECTIONS_CONTENT: Record<CollectionSlug, CollectionContent> = {
     ogDescription: 'Nuestra línea más cálida y envolvente: cuatro velas de invierno pensadas para encenderse entre diciembre y febrero.',
     introTitle: 'Cuatro velas para el invierno que se vive en una cocina',
     introBody: [
-      'Radice es nuestra colección de invierno. Nació en 2024, el primer año del taller, y la forman cuatro velas pensadas para los meses en los que oscurece antes: chimenea, leña de encina, leche caliente con canela, y naranja con clavo de la cocina de la abuela.',
-      'Las velas Radice son más envolventes que las de Ánima. Usan fragancias gourmand y amaderadas con notas de fondo de vainilla, ámbar y tonka. Se vierten a mano en nuestro taller de Vilanova i la Geltrú, en lotes de 30 a 50 unidades, con cera de soja 100% natural, mecha de algodón sin plomo y fragancias sin ftalatos. Duran 45 horas en el formato de 8 oz (230 g).',
+      'Radice es nuestra colección de invierno. Nació en 2024, el primer año del taller, y la forman cuatro velas gourmand pensadas para los meses en los que oscurece antes: leche caliente, café tostado, canela, y un wax melt de matcha honey para los días que no quieres llama.',
+      'Las velas Radice son las más envolventes de la casa. La Focolare (leche caliente) y la Risveglio (café tostado) son las reinas del salón en invierno; la Terra (canela) tiene presencia para cenas largas. Se vierten a mano en nuestro taller de Vilanova i la Geltrú, en lotes de 30 a 50 unidades, con cera de soja 100% natural, mecha de algodón sin plomo y fragancias sin ftalatos. Duran 45 horas en el formato de 8 oz (230 g).',
       'Recomendamos Radice para salones, dormitorios fríos y cenas largas. Es la colección que más regalamos en Navidad. Si prefieres aromas suaves, mira Ánima (primavera). Si quieres algo más fresco, Luce (otoño) o Solea (verano).',
     ],
     seasonMonths: 'diciembre a febrero',
@@ -128,14 +128,14 @@ export const COLLECTIONS_CONTENT: Record<CollectionSlug, CollectionContent> = {
     bestFor: 'Salones, dormitorios fríos, cenas largas, regalos de Navidad, tardes de lluvia.',
     notFor: 'Quien busca aromas frescos o florales. Tampoco para exteriores en días calurosos.',
     scentProfile: {
-      primary: 'Leña de encina y vainilla',
-      secondary: 'Leche caliente con canela',
-      accent: 'Naranja con clavo',
+      primary: 'Leche caliente',
+      secondary: 'Café tostado',
+      accent: 'Canela y matcha honey',
     },
-    moods: ['cálido', 'envolvente', 'gourmand', 'amaderado'],
+    moods: ['cálido', 'envolvente', 'gourmand', 'hogareño'],
     occasions: ['Navidad', 'cenas', 'lluvia', 'lectura nocturna'],
     processNotes:
-      'Fragancia gourmand infusionada con aceites esenciales de canela, naranja y clavo. Reposo de 14 días en ambiente fresco.',
+      'Fragancia gourmand infusionada con notas de leche, café y canela. Reposo de 14 días en ambiente fresco antes de etiquetar.',
     faqs: [
       {
         q: '¿Cuánto dura una vela de la Colección Radice?',
@@ -143,11 +143,11 @@ export const COLLECTIONS_CONTENT: Record<CollectionSlug, CollectionContent> = {
       },
       {
         q: '¿Las velas Radice son fuertes?',
-        a: 'Sí, son nuestras velas más envolventes. La Focolare (leche caliente) y la Risveglio (naranja con clavo) tienen bastante presencia. Si quieres algo más suave, mira Ánima o Solea.',
+        a: 'Sí, son nuestras velas más envolventes. La Focolare (leche caliente) y la Risveglio (café tostado) tienen bastante presencia. Si quieres algo más suave, mira Ánima o Solea.',
       },
       {
         q: '¿Qué tiene de especial la Colección Radice?',
-        a: 'Es la primera colección del taller. La empezamos en octubre de 2024 con cuatro velas inspiradas en la cocina de invierno. La Risveglio (naranja con clavo) es la vela más vendida de Candele Vive.',
+        a: 'Es la primera colección del taller. La empezamos en octubre de 2024 con cuatro velas inspiradas en la cocina de invierno. La Risveglio (café tostado) es la vela más vendida de Candele Vive.',
       },
       {
         q: '¿Se pueden regalar en Navidad?',
@@ -163,8 +163,8 @@ export const COLLECTIONS_CONTENT: Record<CollectionSlug, CollectionContent> = {
       },
     ],
     peopleAlsoAsk: [
-      { q: '¿A qué huele Radice?', a: 'A invierno: chimenea, leña de encina, leche caliente con canela, y naranja con clavo.' },
-      { q: '¿Cuántas velas tiene la Colección Radice?', a: 'Cuatro velas: Focolare, Risveglio, Alba y Terra.' },
+      { q: '¿A qué huele Radice?', a: 'A invierno: leche caliente, café tostado, canela y un toque de matcha honey en los wax melts.' },
+      { q: '¿Cuántas velas tiene la Colección Radice?', a: 'Tres velas (Focolare, Risveglio, Terra) más un wax melt (Forno, matcha honey).' },
       { q: '¿Cuándo se enciende Radice?', a: 'Entre diciembre y febrero. Es nuestra colección de invierno.' },
       { q: '¿Las velas Candele Vive son buenas para regalar?', a: 'Sí, sobre todo Radice. Hacemos cajas de regalo de dos unidades con sello kraft.' },
     ],
@@ -178,9 +178,9 @@ export const COLLECTIONS_CONTENT: Record<CollectionSlug, CollectionContent> = {
     ogDescription: 'La colección de otoño de Candele Vive: aromas amaderados, herbales y un toque gourmand para los meses de octubre a diciembre.',
     introTitle: 'Para el otoño mediterráneo, cuando cambia la luz',
     introBody: [
-      'Luce es nuestra colección de otoño. Reúne cuatro velas y dos wax melts pensados para los meses en los que la luz se vuelve dorada: octubre, noviembre y principios de diciembre. Los aromas son más secos y profundos que los de Ánima, pero menos envolventes que los de Radice.',
-      'La colección incluye la vela Respiro (romero fresco), Forno (pan recién hecho), Fresca (bergamota y menta) y Nube de Cera (wax melts con aroma a colonia Nenuco). Todas se vierten a mano en el taller de Vilanova i la Geltrú con cera de soja 100% natural, mecha de algodón sin plomo y fragancias sin ftalatos. Duran 45 horas en el formato de 8 oz (230 g).',
-      'Luce es para quien busca aromas herbales y limpios, sin la dulzura gourmand de Radice. Es la colección menos conocida, pero la favorita de quien la prueba. Si quieres algo más goloso, mira los wax melts de esta colección — los Cuore y Nuvola — pensados para casas con niños o mascotas.',
+      'Luce es nuestra colección de otoño. Reúne tres velas y un wax melt pensados para los meses en los que la luz se vuelve dorada: octubre, noviembre y principios de diciembre. Los aromas son limpios, herbales y reconfortantes, sin la intensidad gourmand de Radice.',
+      'La colección incluye la vela Alba (lavanda, perfecta para antes de dormir), Respiro (romero fresco, vigorizante sin sobreestimular), Fresca (ropa limpia, la favorita de la comunidad) y los wax melts Nuvola (colonia Nenuco, nostálgico). Todas se vierten a mano en el taller de Vilanova i la Geltrú con cera de soja 100% natural, mecha de algodón sin plomo y fragancias sin ftalatos. Duran 45 horas en el formato de 8 oz (230 g).',
+      'Luce es para quien busca aromas herbales y limpios, sin la dulzura gourmand de Radice. Es la colección menos conocida, pero la favorita de quien la prueba. Los wax melts Nuvola, con su aroma a Nenuco, son la forma más segura de aromatizar casas con niños o mascotas.',
     ],
     seasonMonths: 'octubre a diciembre',
     season: 'Otoño',
@@ -194,18 +194,18 @@ export const COLLECTIONS_CONTENT: Record<CollectionSlug, CollectionContent> = {
     bestFor: 'Cocinas, despachos, oficinas, casas con niños, personas con sensibilidad a olores fuertes.',
     notFor: 'Quien busca aromas dulces o muy envolventes. Tampoco para cenas de fiesta.',
     scentProfile: {
-      primary: 'Romero fresco',
-      secondary: 'Bergamota y menta',
-      accent: 'Pan recién hecho y resina',
+      primary: 'Lavanda',
+      secondary: 'Romero fresco',
+      accent: 'Ropa limpia y colonia Nenuco',
     },
-    moods: ['limpio', 'herbal', 'amaderado', 'fresco'],
-    occasions: ['trabajo', 'cocina', 'oficina', 'mañanas'],
+    moods: ['limpio', 'herbal', 'relajante', 'fresco'],
+    occasions: ['antes de dormir', 'trabajo', 'cocina', 'oficina', 'casas con niños'],
     processNotes:
-      'Mezcla de fragancia y aceites esenciales de romero, menta y bergamota. Wax melts sin mecha para quemador eléctrico o de vela.',
+      'Mezcla de fragancia y aceites esenciales de lavanda y romero. Wax melts sin mecha para quemador eléctrico o de vela.',
     faqs: [
       {
         q: '¿Qué incluye la Colección Luce?',
-        a: 'Cuatro velas (Respiro, Forno, Fresca y Nuvola) y dos wax melts (Cuore y Nuvola). Es nuestra colección de otoño, con aromas herbales y frescos.',
+        a: 'Tres velas (Alba, Respiro, Fresca) y un wax melt (Nuvola). Es nuestra colección de otoño, con aromas herbales, lavanda y aromas limpios.',
       },
       {
         q: '¿Los wax melts son seguros para casas con niños?',
@@ -229,7 +229,7 @@ export const COLLECTIONS_CONTENT: Record<CollectionSlug, CollectionContent> = {
       },
     ],
     peopleAlsoAsk: [
-      { q: '¿Qué huele la Colección Luce?', a: 'Romero fresco, bergamota, menta, pan recién hecho y un toque de resina. Son aromas herbales y limpios.' },
+      { q: '¿Qué huele la Colección Luce?', a: 'Lavanda, romero fresco, ropa limpia y un toque de colonia Nenuco en los wax melts. Son aromas limpios, sin la intensidad gourmand de Radice.' },
       { q: '¿Qué es un wax melt?', a: 'Porciones de cera perfumada que se funden en un quemador, sin llama. Es la forma más segura de aromatizar una casa con niños o mascotas.' },
       { q: '¿Cuánto dura un paquete de wax melts?', a: 'Un paquete de 100 g da para 20-30 sesiones de quemador.' },
       { q: '¿Los wax melts se pueden usar sin quemador?', a: 'No. Necesitas un quemador eléctrico o de vela para fundirlos. Nunca los pongas directamente al fuego.' },
@@ -244,8 +244,8 @@ export const COLLECTIONS_CONTENT: Record<CollectionSlug, CollectionContent> = {
     ogDescription: 'Cuatro velas de verano inspiradas en el Mediterráneo: sal marina, coco, vainilla y brisa.',
     introTitle: 'Cuatro velas para los meses de más luz',
     introBody: [
-      'Solea es nuestra colección de verano. Nació en 2025 — es la más joven de la casa — y la forman cuatro velas pensadas para los meses de junio, julio, agosto y septiembre. Los aromas son frescos, ligeramente dulces, y un punto salinos.',
-      'La vela Sabbia (vainilla) es la más golosa de la línea. Brezza (brisa marina) es la más fresca. Solea (sal y bergamota) es la más icónica. Carezza (coco y lima) es la más veraniega. Todas se vierten a mano en el taller de Vilanova i la Geltrú con cera de soja 100% natural, mecha de algodón sin plomo y fragancias sin ftalatos. Duran 45 horas en el formato de 8 oz (230 g).',
+      'Solea es nuestra colección de verano. Nació en 2025 — es la más joven de la casa — y la forman tres velas y un wax melt pensados para los meses de junio, julio, agosto y septiembre. Los aromas son frescos, ligeramente dulces, con un punto tropical.',
+      'La vela Sabbia (vainilla) es la más golosa de la línea. Solea (coco y cítricos) es la más tropical, la que te lleva a la playa. Brezza (brisa marina) es la más fresca. Y los wax melts Papero (melón fresh) son perfectos para terrazas sin llama. Todas se vierten a mano en el taller de Vilanova i la Geltrú con cera de soja 100% natural, mecha de algodón sin plomo y fragancias sin ftalatos. Duran 45 horas en el formato de 8 oz (230 g).',
       'Solea es para terrazas, cenas al aire libre (en versión wax melt), y para quien echa de menos el mar en invierno. Si prefieres aromas más intensos, mira Radice. Si quieres algo más suave, Ánima.',
     ],
     seasonMonths: 'junio a septiembre',
@@ -260,18 +260,18 @@ export const COLLECTIONS_CONTENT: Record<CollectionSlug, CollectionContent> = {
     bestFor: 'Terrazas, cenas al aire libre, dormitorios calurosos, viajes a la playa, casas de verano.',
     notFor: 'Quien busca aromas pesados o gourmand. Tampoco para climas muy secos.',
     scentProfile: {
-      primary: 'Sal marina y bergamota',
-      secondary: 'Coco y lima',
-      accent: 'Vainilla de Madagascar',
+      primary: 'Coco y cítricos',
+      secondary: 'Brisa marina',
+      accent: 'Vainilla y melón fresh',
     },
-    moods: ['fresco', 'salino', 'mediterráneo', 'ligero'],
+    moods: ['fresco', 'tropical', 'mediterráneo', 'ligero'],
     occasions: ['verano', 'playa', 'terraza', 'atardecer'],
     processNotes:
-      'Fragancia infusionada con aceites esenciales de bergamota, lima y vainilla. Fragancia ligera, pensada para no saturar en ambientes calurosos.',
+      'Fragancia infusionada con notas de coco, vainilla y un toque salino. Ligera, pensada para no saturar en ambientes calurosos.',
     faqs: [
       {
         q: '¿Cuántas velas tiene la Colección Solea?',
-        a: 'Cuatro velas: Sabbia (vainilla), Brezza (brisa), Solea (sal y bergamota) y Carezza (coco y lima). Es la colección más joven de la casa, nació en 2025.',
+        a: 'Tres velas (Sabbia, Solea, Brezza) más un wax melt (Papero, melón fresh). Es la colección más joven de la casa, nació en 2025.',
       },
       {
         q: '¿Las velas Solea son fuertes?',
@@ -311,7 +311,7 @@ export const COLLECTIONS_CONTENT: Record<CollectionSlug, CollectionContent> = {
     introTitle: 'Lo que no cabe en las cuatro estaciones',
     introBody: [
       'Especiales es la colección que se sale del calendario. Aquí van las velas que no son de una estación concreta: velas rituales de cera de abeja, packs de regalo de dos unidades, y ediciones limitadas que se agotan en una tarde.',
-      'Actualmente tenemos tres productos en esta colección. La vela Ritual (cera de abeja pura, aroma a miel cruda) y el Pack Miele (dos velas rituales para los días 11 y 22 del mes) son las más vendidas. La Vela Carezza es una edición limitada de vainilla, ámbar y almizcle, de la que hacemos 50 unidades al año.',
+      'Actualmente tenemos tres productos en esta colección: la Colección Miele (pack de 2 velas de cera de abeja para los días 11 y 22 del mes, ritual de protección y limpieza), la Vela Carezza (vela de masaje con aceite de argán, cera específica que no quema) y Rituale (kit DIY para crear tu propia vela en casa, 500 g de cera de arena con 4 aromas a elegir y 5 mechas).',
       'Todos los productos de Especiales se hacen a mano en el taller de Vilanova i la Geltrú. Las velas rituales usan cera de abeja de apicultores catalanes; los packs vienen en caja kraft con sello. Si buscas algo que no esté en una colección estacional, mira aquí. Si no, Ánima, Radice, Luce y Solea son las cuatro líneas principales.',
     ],
     seasonMonths: 'todo el año',
@@ -326,9 +326,9 @@ export const COLLECTIONS_CONTENT: Record<CollectionSlug, CollectionContent> = {
     bestFor: 'Regalos, rituales personales, quien busca algo fuera de las cuatro estaciones.',
     notFor: 'Quien prefiere velas de cera de soja. Las velas rituales usan cera de abeja por decisión de fórmula.',
     scentProfile: {
-      primary: 'Miel cruda (vela Ritual)',
-      secondary: 'Vainilla, ámbar y almizcle (Carezza)',
-      accent: 'Ediciones limitadas según temporada',
+      primary: 'Cera de abeja natural (miel)',
+      secondary: 'Aceite de argán y cera de masaje',
+      accent: 'Cera de arena neutra, lista para perfumar',
     },
     moods: ['especial', 'ritual', 'regalo', 'único'],
     occasions: ['regalos', 'rituales', 'ocasiones especiales', 'ediciones limitadas'],

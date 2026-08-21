@@ -31,6 +31,10 @@ const studioLinks = [
       <section class="ft__col ft__col--brand">
         <p class="ft__brand">Candele<span class="ft__brand-dot">·</span><em>vive</em></p>
         <p class="ft__copy">{UI.footer.tagline}</p>
+        <p class="ft__motto">
+          <span class="ft__motto-mark" aria-hidden="true">“</span>
+          Una vela nunca perderá nada por ayudar a encender otra.
+        </p>
         <div class="ft__contact">
           <p>{SITE.address.locality} · {SITE.address.region}</p>
           <p><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
@@ -128,6 +132,23 @@ const studioLinks = [
     color: var(--ink-soft);
     max-width: 32rem;
     font-style: italic;
+  }
+  .ft__motto {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-top: var(--space-3);
+    padding-left: var(--space-4);
+    border-left: 2px solid var(--terracotta);
+    max-width: 24rem;
+  }
+  .ft__motto-mark {
+    color: var(--terracotta);
+    font-size: 1.3em;
+    line-height: 0;
+    margin-right: 0.1em;
   }
   .ft__contact {
     margin-top: var(--space-4);

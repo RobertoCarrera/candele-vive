@@ -28,9 +28,10 @@
         ¿Te importa que veamos cómo usas la web?
       </p>
       <p class="cookie-banner__body" id="cookie-banner-desc">
-        Usamos una herramienta (<strong>Microsoft Clarity</strong>) para entender qué
-        páginas funcionan y cuáles no. No te identifica personalmente. Las cookies
-        técnicas de la cesta ya están activas porque son necesarias.
+        Usamos <strong>Microsoft Clarity</strong> y <strong>Google Analytics</strong>
+        para entender qué páginas funcionan y cuáles no. No te identifican
+        personalmente. Las cookies técnicas de la cesta ya están activas porque
+        son necesarias.
         <a href="/cookies" class="cookie-banner__link">Más info</a>
       </p>
     </div>
@@ -143,12 +144,13 @@
   /**
    * Consentimiento RGPD — clave en localStorage.
    *
-   * Versión 1: solo Clarity (analítica). Si añades marketing,
+   * Versión 2: Clarity + Google Analytics 4. Si añades marketing,
    * incrementa la versión para que el banner vuelva a salir.
    */
   const STORAGE_KEY = 'candele-cookie-consent';
-  const CONSENT_VERSION = 1;
+  const CONSENT_VERSION = 2;
   const CLARITY_ID = 'y5ua7e4oby';
+  const GA_ID = 'G-RLSEFKZN8Q';
 
   type ConsentStatus = 'accepted' | 'rejected';
   interface Consent {
@@ -191,6 +193,32 @@
     document.head.appendChild(s);
   };
 
+  const loadGA = (): void => {
+    // dataLayer + gtag deben existir antes de cargar el script de la librería.
+    const w = window as unknown as {
+      dataLayer?: unknown[];
+      gtag?: (...args: unknown[]) => void;
+    };
+    w.dataLayer = w.dataLayer || [];
+    w.gtag = w.gtag || function gtag(...args: unknown[]) {
+      (w.dataLayer as unknown[]).push(args);
+    };
+    (w.gtag as (...args: unknown[]) => void)('js', new Date());
+    (w.gtag as (...args: unknown[]) => void)('config', GA_ID);
+
+    if (document.querySelector(`script[data-ga="loaded"]`)) return;
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+    s.dataset.ga = 'loaded';
+    document.head.appendChild(s);
+  };
+
+  const loadAnalytics = (): void => {
+    loadClarity();
+    loadGA();
+  };
+
   const show = (banner: HTMLElement): void => {
     banner.hidden = false;
   };
@@ -212,7 +240,7 @@
 
     if (current) {
       (window as unknown as { __candeleConsent?: Consent }).__candeleConsent = current;
-      if (current.status === 'accepted') loadClarity();
+      if (current.status === 'accepted') loadAnalytics();
       hide(banner);
       return;
     }
@@ -226,7 +254,7 @@
       const action = target.closest<HTMLElement>('[data-cookie-action]')?.dataset.cookieAction as ConsentStatus | undefined;
       if (!action) return;
       const consent = writeConsent(action);
-      if (consent.status === 'accepted') loadClarity();
+      if (consent.status === 'accepted') loadAnalytics();
       hide(banner);
       window.dispatchEvent(new CustomEvent('cookie:change', { detail: consent }));
     });

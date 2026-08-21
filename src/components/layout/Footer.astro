@@ -258,14 +258,18 @@ const studioLinks = [
     justify-content: space-between;
     gap: var(--space-4);
     margin-block: var(--space-10) var(--space-8);
-    padding: 1.1rem 1.5rem;
+    margin-inline: auto;
+    max-width: 36rem;
+    width: fit-content;
+    max-width: min(36rem, 100%);
+    padding: 0.9rem 1.4rem;
     background: var(--ink);
     color: var(--bg-soft);
     border-radius: var(--r-pill);
     text-decoration: none;
     font-family: var(--font-display);
     font-style: italic;
-    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    font-size: clamp(0.95rem, 1.6vw, 1.1rem);
     line-height: 1.35;
     transition: background 0.3s var(--ease-soft), transform 0.3s var(--ease-soft);
   }
